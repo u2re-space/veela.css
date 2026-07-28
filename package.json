@@ -45,10 +45,11 @@
         "@fest-lib/dom": "^0.1.0"
     },
     "scripts": {
-        "test": "node test/puppeteer/run.mjs",
+        "test": "npm run test:puppeteer",
         "test:puppeteer": "node test/puppeteer/run.mjs",
-        "test:browser": "vite",
+        "test:browser": "npm run demo",
         "dev": "vite --host 0.0.0.0",
+        "demo": "vite",
         "watch": "vite build --watch",
         "build": "vite build --config vite.config.js && npm run docs && npm run docs:md",
         "build:publish": "FEST_NPM_IMPORTS=1 vite build --config vite.config.js",
