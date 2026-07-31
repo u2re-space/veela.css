@@ -1,6 +1,90 @@
-/* ai-refactor: optimized/refactored at 2026-02-13T02:50:43Z */
+/*
+ * Filename: _tokens.scss
+ * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
+ * Change date and time: 16.20.00_31.07.2026
+ * Reason for changes: Palette values via --u2-color-mod (keep token names).
+ */
 
 @use "./config" as config;
+
+// use native custom CSS function syntax
+@#{"function --u2-color-mod(--base-color <color>, --index <number> : 550) returns <color>"} {
+    /* Ограничиваем индекс */
+    --i: clamp(0, var(--index), 1000);
+  
+    /* Переданный цвет считается оттенком 550 */
+    --pivot: 550;
+  
+    /* Расстояние от базового цвета к белой и чёрной границам */
+    --white-distance:
+      clamp(
+        0,
+        calc((var(--pivot) - var(--i)) / var(--pivot)),
+        1
+      );
+  
+    --black-distance:
+      clamp(
+        0,
+        calc(
+          (var(--i) - var(--pivot)) /
+          (1000 - var(--pivot))
+        ),
+        1
+      );
+  
+    /*
+     * Нелинейное изменение светлоты:
+     * близкие к 550 оттенки меньше отличаются от базового.
+     */
+    --to-white: pow(var(--white-distance), 1.15);
+    --to-black: pow(var(--black-distance), 1.08);
+  
+    /*
+     * Цветность максимальна около 550
+     * и плавно снижается к обоим краям.
+     */
+    --center-left:
+      clamp(0, calc(var(--i) / var(--pivot)), 1);
+  
+    --center-right:
+      clamp(
+        0,
+        calc(
+          (1000 - var(--i)) /
+          (1000 - var(--pivot))
+        ),
+        1
+      );
+  
+    --chroma-shape:
+      sqrt(min(var(--center-left), var(--center-right)));
+  
+    /*
+     * На краях остаётся 8% исходной цветности:
+     * получается почти белый/чёрный, но с оттенком base-color.
+     */
+    --chroma-scale:
+      calc(0.08 + 0.92 * var(--chroma-shape));
+  
+    result:
+      oklch(
+        from var(--base-color)
+  
+        /* 98.5% около белого, 16% около чёрного */
+        calc(
+          l
+          + (0.985 - l) * var(--to-white)
+          + (0.16 - l) * var(--to-black)
+        )
+  
+        calc(c * var(--chroma-scale))
+  
+        h
+      );
+  }
+
+
 
 /* ==========================================================================
     Meta / Declarations
@@ -37,37 +121,92 @@ $selectors: $md-roots;
         --base-text-weight-semibold: 600;
         --fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 
-        /* Color system */
+        /*
+         * Color system — seeds + --u2-color-mod (pivot 550).
+         * Neutrals from --base-color ← --color-primary; semantics keep own seeds.
+         */
         --color-primary: light-dark(#5a7fff, #7ca7ff);
-        --color-secondary: light-dark(#6b7280, #94a3b8);
-        --color-accent: light-dark(#64748b, #94a3b8);
-        --color-success: light-dark(#10b981, #34d399);
-        --color-warning: light-dark(#f59e0b, #fbbf24);
-        --color-error: light-dark(#ef4444, #f87171);
-        --color-info: light-dark(#60a5fa, #93c5fd);
+        --base-color: var(--color-primary);
+        --color-secondary: light-dark(
+            --u2-color-mod(var(--base-color), 420),
+            --u2-color-mod(var(--base-color), 680)
+        );
+        --color-accent: light-dark(
+            --u2-color-mod(var(--base-color), 400),
+            --u2-color-mod(var(--base-color), 700)
+        );
+        --color-success: light-dark(#10b981, --u2-color-mod(#10b981, 480));
+        --color-warning: light-dark(#f59e0b, --u2-color-mod(#f59e0b, 480));
+        --color-error: light-dark(#ef4444, --u2-color-mod(#ef4444, 480));
+        --color-info: light-dark(#60a5fa, --u2-color-mod(#60a5fa, 480));
 
         /* Surface colors */
-        --color-surface: light-dark(#fafbfc, #0f1419);
-        --color-surface-container: light-dark(#f1f5f9, #1e293b);
-        --color-surface-container-low: light-dark(#f8fafc, #0f172a);
-        --color-surface-container-lowest: light-dark(#fafbfc, #0f1419);
-        --color-surface-container-high: light-dark(#e2e8f0, #334155);
-        --color-surface-container-highest: light-dark(#cbd5e1, #475569);
+        --color-surface: light-dark(
+            --u2-color-mod(var(--base-color), 60),
+            --u2-color-mod(var(--base-color), 940)
+        );
+        --color-surface-container: light-dark(
+            --u2-color-mod(var(--base-color), 160),
+            --u2-color-mod(var(--base-color), 840)
+        );
+        --color-surface-container-low: light-dark(
+            --u2-color-mod(var(--base-color), 100),
+            --u2-color-mod(var(--base-color), 880)
+        );
+        --color-surface-container-lowest: light-dark(
+            --u2-color-mod(var(--base-color), 50),
+            --u2-color-mod(var(--base-color), 960)
+        );
+        --color-surface-container-high: light-dark(
+            --u2-color-mod(var(--base-color), 220),
+            --u2-color-mod(var(--base-color), 780)
+        );
+        --color-surface-container-highest: light-dark(
+            --u2-color-mod(var(--base-color), 300),
+            --u2-color-mod(var(--base-color), 720)
+        );
 
         /* Text colors */
-        --color-on-surface: light-dark(#1e293b, #f1f5f9);
-        --color-on-surface-variant: light-dark(#64748b, #94a3b8);
-        --color-on-primary: light-dark(#ffffff, #ffffff);
-        --color-on-secondary: light-dark(#ffffff, #ffffff);
+        --color-on-surface: light-dark(
+            --u2-color-mod(var(--base-color), 900),
+            --u2-color-mod(var(--base-color), 100)
+        );
+        --color-on-surface-variant: light-dark(
+            --u2-color-mod(var(--base-color), 700),
+            --u2-color-mod(var(--base-color), 280)
+        );
+        --color-on-primary: light-dark(
+            --u2-color-mod(var(--base-color), 40),
+            --u2-color-mod(var(--base-color), 40)
+        );
+        --color-on-secondary: light-dark(
+            --u2-color-mod(var(--base-color), 40),
+            --u2-color-mod(var(--base-color), 920)
+        );
 
         /* Border and outline */
-        --color-outline: light-dark(#cbd5e1, #475569);
-        --color-outline-variant: light-dark(#94a3b8, #64748b);
+        --color-outline: light-dark(
+            --u2-color-mod(var(--base-color), 300),
+            --u2-color-mod(var(--base-color), 720)
+        );
+        --color-outline-variant: light-dark(
+            --u2-color-mod(var(--base-color), 400),
+            --u2-color-mod(var(--base-color), 640)
+        );
 
         /* Interactive states */
-        --hover: light-dark(#f1f5f9, #334155);
-        --active: light-dark(#e2e8f0, #1e293b);
-        --focus: light-dark(#dbeafe, #1e40af);
+        --hover: light-dark(
+            --u2-color-mod(var(--base-color), 160),
+            --u2-color-mod(var(--base-color), 780)
+        );
+        --active: light-dark(
+            --u2-color-mod(var(--base-color), 220),
+            --u2-color-mod(var(--base-color), 840)
+        );
+        --focus: light-dark(
+            --u2-color-mod(var(--base-color), 200),
+            --u2-color-mod(var(--base-color), 620)
+        );
 
         /* Elevation */
         --elev-0: 0 0 0 0 rgba(0, 0, 0, 0%);
@@ -248,58 +387,65 @@ $selectors: $md-roots;
     }
 }
 
-/* ai-refactor: optimized/refactored at 2026-02-13T00:48:23Z */
+/*
+ * Global theme mixins — token NAMES stable; VALUES from --u2-color-mod.
+ * Index scale: 0 white ← 550 seed → 1000 black (see function above).
+ */
 @mixin -theme-light {
     --color-primary: #5a7fff;
-    --color-on-primary: #ffffff;
-    --color-secondary: #6b7280;
-    --color-on-secondary: #ffffff;
-    --color-tertiary: #64748b;
-    --color-on-tertiary: #ffffff;
+    --base-color: var(--color-primary);
+    --color-on-primary: --u2-color-mod(var(--base-color), 40);
+    --color-secondary: --u2-color-mod(var(--base-color), 420);
+    --color-on-secondary: --u2-color-mod(var(--base-color), 40);
+    --color-tertiary: --u2-color-mod(var(--base-color), 400);
+    --color-on-tertiary: --u2-color-mod(var(--base-color), 40);
     --color-error: #ef4444;
-    --color-on-error: #ffffff;
+    --color-on-error: --u2-color-mod(var(--color-error), 40);
     --color-success: #4caf50;
     --color-warning: #ff9800;
     --color-info: #2196f3;
-    --color-background: #fafbfc;
-    --color-on-background: #1e293b;
-    --color-surface: #fafbfc;
-    --color-on-surface: #1e293b;
-    --color-surface-variant: #f1f5f9;
-    --color-on-surface-variant: #64748b;
-    --color-outline: #cbd5e1;
-    --color-outline-variant: #94a3b8;
-    --color-surface-container-low: color-mix(in oklab, var(--color-surface) 96%, var(--color-primary) 4%);
-    --color-surface-container: color-mix(in oklab, var(--color-surface) 92%, var(--color-primary) 8%);
-    --color-surface-container-high: color-mix(in oklab, var(--color-surface) 88%, var(--color-primary) 12%);
-    --color-surface-container-highest: color-mix(in oklab, var(--color-surface) 84%, var(--color-primary) 16%);
+    --color-background: --u2-color-mod(var(--base-color), 60);
+    --color-on-background: --u2-color-mod(var(--base-color), 900);
+    --color-surface: --u2-color-mod(var(--base-color), 60);
+    --color-on-surface: --u2-color-mod(var(--base-color), 900);
+    --color-surface-variant: --u2-color-mod(var(--base-color), 160);
+    --color-on-surface-variant: --u2-color-mod(var(--base-color), 700);
+    --color-outline: --u2-color-mod(var(--base-color), 300);
+    --color-outline-variant: --u2-color-mod(var(--base-color), 400);
+    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 50);
+    --color-surface-container-low: --u2-color-mod(var(--base-color), 100);
+    --color-surface-container: --u2-color-mod(var(--base-color), 160);
+    --color-surface-container-high: --u2-color-mod(var(--base-color), 220);
+    --color-surface-container-highest: --u2-color-mod(var(--base-color), 300);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 75%, transparent);
 }
 
 @mixin -theme-dark {
     --color-primary: #7ca7ff;
-    --color-on-primary: #0f172a;
-    --color-secondary: #94a3b8;
-    --color-on-secondary: #1e293b;
-    --color-tertiary: #94a3b8;
-    --color-on-tertiary: #0f172a;
+    --base-color: var(--color-primary);
+    --color-on-primary: --u2-color-mod(var(--base-color), 920);
+    --color-secondary: --u2-color-mod(var(--base-color), 680);
+    --color-on-secondary: --u2-color-mod(var(--base-color), 920);
+    --color-tertiary: --u2-color-mod(var(--base-color), 700);
+    --color-on-tertiary: --u2-color-mod(var(--base-color), 920);
     --color-error: #f87171;
-    --color-on-error: #450a0a;
+    --color-on-error: --u2-color-mod(var(--color-error), 920);
     --color-success: #66bb6a;
     --color-warning: #ffa726;
     --color-info: #42a5f5;
-    --color-background: #0f1419;
-    --color-on-background: #f1f5f9;
-    --color-surface: #0f1419;
-    --color-on-surface: #f1f5f9;
-    --color-surface-variant: #1e293b;
-    --color-on-surface-variant: #cbd5e1;
-    --color-outline: #475569;
-    --color-outline-variant: #334155;
-    --color-surface-container-low: color-mix(in oklab, var(--color-surface) 92%, var(--color-primary) 8%);
-    --color-surface-container: color-mix(in oklab, var(--color-surface) 88%, var(--color-primary) 12%);
-    --color-surface-container-high: color-mix(in oklab, var(--color-surface) 84%, var(--color-primary) 16%);
-    --color-surface-container-highest: color-mix(in oklab, var(--color-surface) 80%, var(--color-primary) 20%);
+    --color-background: --u2-color-mod(var(--base-color), 940);
+    --color-on-background: --u2-color-mod(var(--base-color), 100);
+    --color-surface: --u2-color-mod(var(--base-color), 940);
+    --color-on-surface: --u2-color-mod(var(--base-color), 100);
+    --color-surface-variant: --u2-color-mod(var(--base-color), 840);
+    --color-on-surface-variant: --u2-color-mod(var(--base-color), 280);
+    --color-outline: --u2-color-mod(var(--base-color), 720);
+    --color-outline-variant: --u2-color-mod(var(--base-color), 640);
+    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 960);
+    --color-surface-container-low: --u2-color-mod(var(--base-color), 880);
+    --color-surface-container: --u2-color-mod(var(--base-color), 840);
+    --color-surface-container-high: --u2-color-mod(var(--base-color), 780);
+    --color-surface-container-highest: --u2-color-mod(var(--base-color), 720);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 70%, transparent);
 }
 
@@ -417,11 +563,14 @@ $selectors: $md-roots;
         --view-bg: var(--color-surface);
         --view-fg: var(--color-on-surface);
         --view-border: var(--color-outline-variant);
-        --view-input-bg: light-dark(#ffffff, var(--color-surface-container-high));
-        --view-files-bg: light-dark(rgba(0, 0, 0, 0.02), var(--color-surface-container-low));
-        --view-file-bg: light-dark(rgba(0, 0, 0, 0.03), var(--color-surface-container-lowest, var(--color-surface-container-low)));
-        --view-results-bg: light-dark(rgba(0, 0, 0, 0.01), var(--color-surface-container-low));
-        --view-result-bg: light-dark(rgba(0, 0, 0, 0.03), var(--color-surface-container-lowest, var(--color-surface-container-low)));
+        --view-input-bg: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 40),
+            var(--color-surface-container-high)
+        );
+        --view-files-bg: var(--color-surface-container-low);
+        --view-file-bg: var(--color-surface-container-lowest, var(--color-surface-container-low));
+        --view-results-bg: var(--color-surface-container-low);
+        --view-result-bg: var(--color-surface-container-lowest, var(--color-surface-container-low));
 
         --color-surface-elevated: var(--color-surface-container);
         --color-surface-hover: var(--color-surface-container-low);
@@ -430,10 +579,19 @@ $selectors: $md-roots;
 
         --color-background-alt: var(--color-surface-variant);
 
-        --color-primary-hover: color-mix(in oklab, var(--color-primary) 80%, black);
-        --color-primary-active: color-mix(in oklab, var(--color-primary) 65%, black);
+        --color-primary-hover: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 620),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 480)
+        );
+        --color-primary-active: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 700),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 400)
+        );
         --color-accent: var(--color-secondary);
-        --color-accent-hover: color-mix(in oklab, var(--color-secondary) 80%, black);
+        --color-accent-hover: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 500),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 600)
+        );
         --color-on-accent: var(--color-on-secondary);
 
         --color-border-hover: var(--color-outline-variant);
@@ -447,16 +605,16 @@ $selectors: $md-roots;
         --color-text-inverse: var(--color-on-primary);
 
         --color-link: var(--color-primary);
-        --color-link-hover: color-mix(in oklab, var(--color-primary) 80%, black);
+        --color-link-hover: var(--color-primary-hover);
 
-        --color-success-light: color-mix(in oklab, var(--color-success) 60%, white);
-        --color-success-dark: color-mix(in oklab, var(--color-success) 70%, black);
-        --color-warning-light: color-mix(in oklab, var(--color-warning) 60%, white);
-        --color-warning-dark: color-mix(in oklab, var(--color-warning) 70%, black);
-        --color-error-light: color-mix(in oklab, var(--color-error) 60%, white);
-        --color-error-dark: color-mix(in oklab, var(--color-error) 70%, black);
-        --color-info-light: color-mix(in oklab, var(--color-info) 60%, white);
-        --color-info-dark: color-mix(in oklab, var(--color-info) 70%, black);
+        --color-success-light: --u2-color-mod(var(--color-success), 280);
+        --color-success-dark: --u2-color-mod(var(--color-success), 720);
+        --color-warning-light: --u2-color-mod(var(--color-warning), 280);
+        --color-warning-dark: --u2-color-mod(var(--color-warning), 720);
+        --color-error-light: --u2-color-mod(var(--color-error), 280);
+        --color-error-dark: --u2-color-mod(var(--color-error), 720);
+        --color-info-light: --u2-color-mod(var(--color-info), 280);
+        --color-info-dark: --u2-color-mod(var(--color-info), 720);
 
         --color-bg: var(--color-surface, var(--color-surface));
         --color-bg-alt: var(--color-surface-variant, var(--color-surface-variant));
