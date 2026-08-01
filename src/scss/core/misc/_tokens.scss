@@ -125,8 +125,9 @@ $selectors: $md-roots;
          * Color system — seeds + --u2-color-mod (pivot 550).
          * Neutrals from --base-color ← --color-primary; semantics keep own seeds.
          */
-        --color-primary: light-dark(#5a7fff, #7ca7ff);
+        --color-primary: light-dark(#2e3a64, #91b6e3);
         --base-color: var(--color-primary);
+        --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
         --color-secondary: light-dark(
             --u2-color-mod(var(--base-color), 420),
             --u2-color-mod(var(--base-color), 680)
@@ -142,70 +143,70 @@ $selectors: $md-roots;
 
         /* Surface colors */
         --color-surface: light-dark(
-            --u2-color-mod(var(--base-color), 60),
-            --u2-color-mod(var(--base-color), 940)
+            --u2-color-mod(var(--base-color-neutralized), 10),
+            --u2-color-mod(var(--base-color-neutralized), 980)
         );
         --color-surface-container: light-dark(
-            --u2-color-mod(var(--base-color), 160),
-            --u2-color-mod(var(--base-color), 840)
+            --u2-color-mod(var(--base-color-neutralized), 10),
+            --u2-color-mod(var(--base-color-neutralized), 980)
         );
         --color-surface-container-low: light-dark(
-            --u2-color-mod(var(--base-color), 100),
-            --u2-color-mod(var(--base-color), 880)
+            --u2-color-mod(var(--base-color-neutralized), 20),
+            --u2-color-mod(var(--base-color-neutralized), 970)
         );
         --color-surface-container-lowest: light-dark(
-            --u2-color-mod(var(--base-color), 50),
-            --u2-color-mod(var(--base-color), 960)
+            --u2-color-mod(var(--base-color-neutralized), 20),
+            --u2-color-mod(var(--base-color-neutralized), 960)
         );
         --color-surface-container-high: light-dark(
-            --u2-color-mod(var(--base-color), 220),
-            --u2-color-mod(var(--base-color), 780)
+            --u2-color-mod(var(--base-color-neutralized), 10),
+            --u2-color-mod(var(--base-color-neutralized), 990)
         );
         --color-surface-container-highest: light-dark(
-            --u2-color-mod(var(--base-color), 300),
-            --u2-color-mod(var(--base-color), 720)
+            --u2-color-mod(var(--base-color-neutralized), 5),
+            --u2-color-mod(var(--base-color-neutralized), 1000)
         );
 
         /* Text colors */
         --color-on-surface: light-dark(
-            --u2-color-mod(var(--base-color), 900),
-            --u2-color-mod(var(--base-color), 100)
+            --u2-color-mod(var(--base-color-neutralized), 900),
+            --u2-color-mod(var(--base-color-neutralized), 100)
         );
         --color-on-surface-variant: light-dark(
-            --u2-color-mod(var(--base-color), 700),
-            --u2-color-mod(var(--base-color), 280)
+            --u2-color-mod(var(--base-color-neutralized), 700),
+            --u2-color-mod(var(--base-color-neutralized), 280)
         );
         --color-on-primary: light-dark(
-            --u2-color-mod(var(--base-color), 40),
-            --u2-color-mod(var(--base-color), 40)
+            --u2-color-mod(var(--base-color-neutralized), 40),
+            --u2-color-mod(var(--base-color-neutralized), 40)
         );
         --color-on-secondary: light-dark(
-            --u2-color-mod(var(--base-color), 40),
-            --u2-color-mod(var(--base-color), 920)
+            --u2-color-mod(var(--base-color-neutralized), 40),
+            --u2-color-mod(var(--base-color-neutralized), 920)
         );
 
         /* Border and outline */
         --color-outline: light-dark(
-            --u2-color-mod(var(--base-color), 300),
-            --u2-color-mod(var(--base-color), 720)
+            --u2-color-mod(var(--base-color-neutralized), 300),
+            --u2-color-mod(var(--base-color-neutralized), 720)
         );
         --color-outline-variant: light-dark(
-            --u2-color-mod(var(--base-color), 400),
-            --u2-color-mod(var(--base-color), 640)
+            --u2-color-mod(var(--base-color-neutralized), 400),
+            --u2-color-mod(var(--base-color-neutralized), 640)
         );
 
         /* Interactive states */
         --hover: light-dark(
-            --u2-color-mod(var(--base-color), 160),
-            --u2-color-mod(var(--base-color), 780)
+            --u2-color-mod(var(--base-color-neutralized), 160),
+            --u2-color-mod(var(--base-color-neutralized), 780)
         );
         --active: light-dark(
-            --u2-color-mod(var(--base-color), 220),
-            --u2-color-mod(var(--base-color), 840)
+            --u2-color-mod(var(--base-color-neutralized), 220),
+            --u2-color-mod(var(--base-color-neutralized), 840)
         );
         --focus: light-dark(
-            --u2-color-mod(var(--base-color), 200),
-            --u2-color-mod(var(--base-color), 620)
+            --u2-color-mod(var(--base-color-neutralized), 200),
+            --u2-color-mod(var(--base-color-neutralized), 620)
         );
 
         /* Elevation */
@@ -392,7 +393,7 @@ $selectors: $md-roots;
  * Index scale: 0 white ← 550 seed → 1000 black (see function above).
  */
 @mixin -theme-light {
-    --color-primary: #5a7fff;
+    --color-primary: #91b6e3;
     --base-color: var(--color-primary);
     --color-on-primary: --u2-color-mod(var(--base-color), 40);
     --color-secondary: --u2-color-mod(var(--base-color), 420);
@@ -421,7 +422,7 @@ $selectors: $md-roots;
 }
 
 @mixin -theme-dark {
-    --color-primary: #7ca7ff;
+    --color-primary: #2e3a64;
     --base-color: var(--color-primary);
     --color-on-primary: --u2-color-mod(var(--base-color), 920);
     --color-secondary: --u2-color-mod(var(--base-color), 680);
