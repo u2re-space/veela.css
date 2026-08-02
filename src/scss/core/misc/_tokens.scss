@@ -1,11 +1,12 @@
 /*
  * Filename: _tokens.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
- * Change date and time: 16.20.00_31.07.2026
- * Reason for changes: Box primary restored to familiar blue (#5a7fff/#7ca7ff); wallpaper may override.
+ * Change date and time: 09.10.00_02.08.2026
+ * Reason for changes: Concrete light/dark surface mixins under data-theme (fix intermittent Light).
  */
 
 @use "./config" as config;
+@use "./color-properties";
 
 // use native custom CSS function syntax
 @#{"function --u2-color-mod(--base-color <color>, --index <number> : 550) returns <color>"} {
@@ -389,12 +390,36 @@ $selectors: $md-roots;
 }
 
 /*
- * Global theme mixins — token NAMES stable; VALUES from --u2-color-mod.
- * Index scale: 0 white ← 550 seed → 1000 black (see function above).
+ * WHY: Pinned themes use *concrete* mod indices — not `light-dark()`.
+ * `light-dark()` + mixed color-scheme (OS vs app, shadow hosts, typed @property) caused
+ * Light QS tile with dark surfaces / cream panels with light-on-light labels.
+ * Index scale: 0 white ← 550 seed → 1000 black. Seeds stay writable by WallpaperTheme.
  */
-@mixin -theme-light {
-    --color-primary: #91b6e3;
+@mixin -theme-seed-bridge {
     --base-color: var(--color-primary);
+    --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
+    --wf-md-primary: var(--color-primary);
+    --wf-md-seed: var(--base-color);
+}
+
+@mixin -theme-aliases {
+    --color-bg: var(--color-background);
+    --color-text: var(--color-on-background);
+    --color-fg: var(--color-on-surface);
+    --on-surface-color: var(--color-on-surface);
+    --on-surface-variant: var(--color-on-surface-variant);
+    --wf-md-surface: var(--color-surface);
+    --wf-md-on-surface: var(--color-on-surface);
+    --wf-md-on-surface-variant: var(--color-on-surface-variant);
+    --wf-md-surf-container: var(--color-surface-container);
+    --wf-md-surf-container-low: var(--color-surface-container-low);
+    --wf-md-surf-container-high: var(--color-surface-container-high);
+    --wf-md-outline-variant: var(--color-outline-variant);
+}
+
+/** Light surfaces — always light chrome; hue from --base-color / wallpaper. */
+@mixin -theme-light {
+    @include -theme-seed-bridge;
     --color-on-primary: --u2-color-mod(var(--base-color), 40);
     --color-secondary: --u2-color-mod(var(--base-color), 420);
     --color-on-secondary: --u2-color-mod(var(--base-color), 40);
@@ -419,11 +444,12 @@ $selectors: $md-roots;
     --color-surface-container-high: --u2-color-mod(var(--base-color), 220);
     --color-surface-container-highest: --u2-color-mod(var(--base-color), 300);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 75%, transparent);
+    @include -theme-aliases;
 }
 
+/** Dark surfaces — always dark chrome; hue from --base-color / wallpaper. */
 @mixin -theme-dark {
-    --color-primary: #2e3a64;
-    --base-color: var(--color-primary);
+    @include -theme-seed-bridge;
     --color-on-primary: --u2-color-mod(var(--base-color), 920);
     --color-secondary: --u2-color-mod(var(--base-color), 680);
     --color-on-secondary: --u2-color-mod(var(--base-color), 920);
@@ -448,6 +474,7 @@ $selectors: $md-roots;
     --color-surface-container-high: --u2-color-mod(var(--base-color), 780);
     --color-surface-container-highest: --u2-color-mod(var(--base-color), 720);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 70%, transparent);
+    @include -theme-aliases;
 }
 
 @layer tokens, base, layout, utilities, shells, shell, views, view, viewer, components, ux-layer, markdown, essentials, print, print-breaks, overrides;
@@ -456,7 +483,10 @@ $selectors: $md-roots;
     :root,
     :host,
     :scope {
+        /* Box seed; WallpaperTheme may override --color-primary on :root. */
+        --color-primary: #5a7fff;
         color-scheme: light dark;
+        /* Default = light concrete; OS-dark media + data-theme pins override below. */
         @include -theme-light;
 
         --space-xs: 0.25rem;
@@ -679,22 +709,36 @@ $selectors: $md-roots;
         --status-font-size: var(--text-xs);
     }
 
+    /* Auto (no pin): follow OS preference with concrete tokens — not light-dark(). */
     @media (prefers-color-scheme: dark) {
-        :root,
-        :host,
-        :scope {
+        :root:not([data-theme="light"]):not([data-theme="dark"]),
+        :host:not([data-theme="light"]):not([data-theme="dark"]) {
+            color-scheme: dark;
             @include -theme-dark;
         }
     }
 
+    /*
+     * Pinned app theme — highest authority. Concrete surfaces so shadow/UI never mix
+     * OS color-scheme with app light (Settings cream + white labels).
+     */
+    :root[data-theme="light"],
+    :host[data-theme="light"],
     [data-theme="light"] {
-        color-scheme: light;
+        color-scheme: light only;
         @include -theme-light;
     }
 
+    :root[data-theme="dark"],
+    :host[data-theme="dark"],
     [data-theme="dark"] {
-        color-scheme: dark;
+        color-scheme: dark only;
         @include -theme-dark;
+    }
+
+    :root[data-scheme="auto"]:not([data-theme="light"]):not([data-theme="dark"]),
+    :root[data-scheme="system"]:not([data-theme="light"]):not([data-theme="dark"]) {
+        color-scheme: light dark;
     }
 
     @media (prefers-reduced-motion: reduce) {

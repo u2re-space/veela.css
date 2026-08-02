@@ -1,0 +1,64 @@
+/*
+ * Filename: _color-properties.scss
+ * FullPath: modules/projects/veela.css/src/scss/core/misc/_color-properties.scss
+ * Change date and time: 09.05.00_02.08.2026
+ * Reason for changes: Only seed hues as @property — semantic light-dark() must stay unregistered.
+ */
+
+/*
+ * INVARIANT: Do NOT register `--color-surface` / `--color-on-surface` / etc. as `@property <color>`.
+ * WHY: Typed colors compute `light-dark()` on the defining element (:root) and inherit a *concrete*
+ * color. Children that lock `color-scheme: light` then get cream surfaces (local light-dark) but
+ * keep light-on-dark text from the inherited computed token — Settings Appearance labels vanish.
+ *
+ * Seeds only: WallpaperTheme / Quick Settings write these; surfaces derive via unregistered
+ * `light-dark(--u2-color-mod(...))` in `_tokens.scss` and re-evaluate per used color-scheme.
+ */
+
+@property --color-primary {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #5a7fff;
+}
+
+@property --base-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #5a7fff;
+}
+
+@property --color-secondary {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #6b8cff;
+}
+
+@property --color-tertiary {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #8aa0ff;
+}
+
+@property --color-error {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #ef4444;
+}
+
+@property --color-success {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #4caf50;
+}
+
+@property --color-warning {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #ff9800;
+}
+
+@property --color-info {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #2196f3;
+}
