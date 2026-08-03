@@ -525,3 +525,6 @@ $cps: 0.0001;
     @return string.unquote("calc(#{$value} + #{$value})");
 }
 
+@function value-or($value, $fallback) {
+    @return if($value == null, $fallback, $value);
+}
