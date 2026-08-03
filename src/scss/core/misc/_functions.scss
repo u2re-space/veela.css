@@ -526,5 +526,5 @@ $cps: 0.0001;
 }
 
 @function value-or($value, $fallback) {
-    @return if($value == null, $fallback, $value);
+    @return if(sass($value == null): $fallback; else: $value);
 }
