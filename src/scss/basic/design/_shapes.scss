@@ -22,7 +22,7 @@
 
         // Rendering
         border-radius: 1.5rem;
-        clip-path: var(--clip-path, none);
+        //clip-path: var(--clip-path, none);
         z-index: 1;
 
         // Interaction
@@ -53,8 +53,7 @@
     *:not(:has(.shaped)),
     *:not(.shaped) > *,
     *:not(.shaped) .shaped {
-        --border-radius: var(--radius-md);
-        --clip-path: none;
+        //--clip-path: none;
 
         // ─────────────────────────────────────────────────────────────────────────
         // Base Shape Container
@@ -63,8 +62,6 @@
             contain: strict;
             overflow: hidden;
             aspect-ratio: 1 / 1;
-            clip-path: var(--clip-path, none);
-            border-radius: var(--border-radius, var(--radius-md));
             pointer-events: auto;
             touch-action: none;
         }
