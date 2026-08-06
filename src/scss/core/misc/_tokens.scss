@@ -1,8 +1,26 @@
 /*
  * Filename: _tokens.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
- * Change date and time: 09.10.00_02.08.2026
- * Reason for changes: Concrete light/dark surface mixins under data-theme (fix intermittent Light).
+ * Change date and time: 12.30.00_06.08.2026
+ * Reason for changes: Unify all color tokens — this file is the SINGLE SOURCE OF TRUTH for color token defaults across veela, fl.ui, and app shells/views.
+ */
+
+/*
+ * INVARIANT: This is the canonical color-token registry for the full veela bundle.
+ * All color token DEFAULTS live here on `:root, :host, :scope`.
+ * - `misc/_tokens.scss` is a symlink of this file.
+ * - `basic/misc/_tokens.scss` and `advanced/misc/_tokens.scss` are intentional
+ *   per-bundle SCSS alias shims (no CSS output) for the lightweight vl-basic / advanced
+ *   bundles; they MUST NOT `@forward` this file (would pull the full `@layer tokens`
+ *   CSS into those bundles and break their size semantics).
+ * - `basic/misc/_normalize.scss` carries a documented vl-basic fallback palette for
+ *   standalone vl-basic loading (no advanced MD3 tokens bundled).
+ * - The advanced MD3/C2 system (`advanced/tokens/_variables.scss`, `_color.scss`,
+ *   `_shadow.scss`) keeps its mixin/function definitions in place (depends on
+ *   `veela-lib`); color-token EMISSION for that system is invoked from here where
+ *   safe, otherwise remains in its layer with a pointer comment.
+ * - Component/shell/view files keep only context overrides and shadow-DOM
+ *   `var(--token, light-dark(...))` fallbacks; they never redefine a canonical default.
  */
 
 @use "./config" as config;
@@ -771,6 +789,91 @@ $selectors: $md-roots;
         --status-height: 24px;
         --status-bg: var(--color-surface-elevated, var(--color-surface-container-high));
         --status-font-size: var(--text-xs);
+
+        /* ── Shell chrome tokens (cross-shell registry) ─────────────────────────
+         * WHY: previously scattered across minimal/immersive/faint shells with
+         * duplicated `light-dark(var(--color-*), var(--color-*))` and offline hex
+         * fallbacks. Defined once here in terms of canonical `--color-*` so canonical
+         * is the single value source. Shells keep only theme/state overrides and
+         * documented offline/SSR hex fallbacks for when veela is not loaded.
+         */
+        --shell-bg: var(--color-surface);
+        --shell-fg: var(--color-on-surface);
+        --shell-nav-bg: var(--color-surface-container-high);
+        --shell-nav-fg: var(--color-on-surface);
+        --shell-nav-border: var(--color-outline-variant);
+        --shell-btn-hover: var(--color-surface-container);
+        --shell-btn-active-bg: color-mix(in oklab, var(--color-primary) 18%, var(--color-surface));
+        --shell-btn-active-fg: var(--color-on-surface);
+        --shell-status-bg: var(--color-surface-container-low);
+        --shell-status-fg: var(--color-on-surface);
+
+        /* ── Faint shell tokens (subsystem boot shells) ───────────────────────
+         * Derived from canonical `--color-*`; previously duplicated as
+         * `light-dark(var(--color-*), var(--color-*))` in `subsystem/boot/shells.scss`.
+         */
+        --faint-nav-bg: var(--color-surface-container-high);
+        --faint-nav-border: var(--color-outline-variant);
+        --faint-sidebar-bg: var(--color-surface-container-high);
+
+        /* ── Environment-shell tokens (color subset) ──────────────────────────
+         * `--env-status-fg` / `--env-launcher-fg*` are concrete defaults: the
+         * overlay status/launcher sit on wallpaper, so they carry their own
+         * luminance values (wallpaper probe may override on `:root`).
+         * Non-color `--env-*` (z-index, safe-area, insets) stay in environment-shell.
+         */
+        --env-status-fg: light-dark(#1c1c1e, #f5f5f7);
+        --env-status-fg-muted: color-mix(in oklab, var(--env-status-fg) 78%, transparent);
+        --env-launcher-fg: #f7f7f8;
+        --env-launcher-fg-shadow: rgb(0 0 0 / 0.88);
+        --env-launcher-fg-glow: rgb(0 0 0 / 0.45);
+
+        /* ── fl.ui `--error-color` alias ────────────────────────────────────
+         * Canonical alias so fl.ui/components can consume `var(--error-color)`
+         * without a standalone fallback definition.
+         */
+        --error-color: var(--color-error, #f87171);
+
+        /* ── Settings-view semantic tokens (`--sv-*`) ──────────────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*` / `--base-color`.
+         * Source of truth for the default relationships lives here; settings-view keeps
+         * only theme-pinned overrides (`html[data-theme]`) and shadow-DOM self-sufficiency
+         * fallbacks at use sites (`var(--sv-*, light-dark(...))`).
+         */
+        --sv-bg: var(--color-surface-container-low, light-dark(#eef1f6, #0f1318));
+        --sv-fg: var(--color-on-surface, light-dark(#12151a, #e8edf2));
+        --sv-muted: var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc));
+        --sv-outline: var(--color-outline-variant, light-dark(#c5cdd8, #3d4755));
+        --sv-surface-1: var(--color-surface-container-low, light-dark(#ffffff, #171c24));
+        --sv-surface-2: var(--color-surface-container, light-dark(#f4f6fa, #1c232d));
+        --sv-primary: var(--base-color, var(--color-primary, #5a7fff));
+        --sv-danger: var(--color-error, #d32f2f);
+
+        /* ── History-view semantic tokens (`--vh-*`) ──────────────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*`.
+         * Source of truth for the default relationships lives here; history-view keeps
+         * only the complex derived tokens (`--vh-item-border/preview-bg/elev`) and
+         * shadow-DOM self-sufficiency fallbacks at use sites.
+         */
+        --vh-bg: var(--color-surface, light-dark(#eef1f6, #0f1318));
+        --vh-fg: var(--color-on-surface, light-dark(#12151a, #e8edf2));
+        --vh-muted: var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc));
+        --vh-primary: var(--color-primary, #007acc);
+        --vh-danger: var(--color-error, #d32f2f);
+        --vh-on-primary: var(--color-on-primary, #ffffff);
+        --vh-item-bg: var(--color-surface-container-low, light-dark(#e0e5ee, #0a0d12));
+
+        /* ── Explorer / shared view color tokens (`--view-*`) ────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*`.
+         * Source of truth for the default relationships lives here; explorer-view keeps
+         * only `--explorer-*` non-color (radius/pad/font) and shadow-DOM self-sufficiency
+         * fallbacks at use sites. Shared `--view-*` namespace also consumed by markdown-view.
+         */
+        --view-border: color-mix(in oklab, var(--color-outline-variant, #888) 45%, transparent);
+        --view-fg-muted: color-mix(in oklab, var(--color-on-surface, #ccc) 72%, transparent);
+        --view-hover-bg: color-mix(in oklab, var(--color-primary, #3794ff) 12%, transparent);
+        --view-selected-bg: color-mix(in oklab, var(--color-primary, #3794ff) 18%, transparent);
+        --view-selected-border: var(--color-primary, #3794ff);
     }
 
     /* Auto (no pin): follow OS preference with concrete tokens — not light-dark(). */

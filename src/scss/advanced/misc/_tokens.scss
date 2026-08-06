@@ -1,3 +1,17 @@
+/*
+ * Filename: _tokens.scss
+ * FullPath: modules/projects/veela.css/src/scss/advanced/misc/_tokens.scss
+ * Change date and time: 12.30.00_06.08.2026
+ * Reason for changes: Document canonical SoT for color tokens.
+ */
+/*
+ * INVARIANT: Intentional per-bundle SCSS alias shim for the advanced bundle.
+ * Produces NO CSS output — only `$color-*` / `$space-*` / `$radius-*` / `$font-*` SCSS aliases.
+ * Canonical color-token source of truth: `core/misc/_tokens.scss` (full bundle).
+ * Do NOT `@forward` canonical here — would emit the full `@layer tokens` CSS into the
+ * advanced bundle and break its size semantics.
+ */
+
 // Design tokens: SCSS aliases for CSS custom properties
 // Keep aliases small and meaningful to encourage reuse
 
