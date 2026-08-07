@@ -6,12 +6,12 @@
  *
  * @example
  * ```ts
- * import { loadAdvancedStyles } from "fest/veela/advanced";
+ * import { loadAdvancedStyles } from "@fest-lib/veela/advanced";
  * await loadAdvancedStyles();
  * ```
  */
 
-import { loadAsAdopted } from "fest/dom";
+import { loadAsAdopted } from "@fest-lib/dom";
 
 import advancedStyles from "./index.scss?inline";
 

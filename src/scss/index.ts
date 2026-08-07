@@ -12,11 +12,11 @@
  * @example
  * ```ts
  * // Load specific variant
- * import { loadBasicStyles } from "fest/veela/runtime";
+ * import { loadBasicStyles } from "@fest-lib/veela/runtime";
  * await loadBasicStyles();
  *
  * // Or use the variant loader
- * import { loadVeelaVariant } from "fest/veela/runtime";
+ * import { loadVeelaVariant } from "@fest-lib/veela/runtime";
  * await loadVeelaVariant("advanced");
  * ```
  */

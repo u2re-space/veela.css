@@ -6,12 +6,12 @@
  *
  * @example
  * ```ts
- * import { loadCoreStyles } from "fest/veela/core";
+ * import { loadCoreStyles } from "@fest-lib/veela/core";
  * await loadCoreStyles();
  * ```
  */
 
-import { loadAsAdopted } from "fest/dom"; //@ts-ignore
+import { loadAsAdopted } from "@fest-lib/dom"; //@ts-ignore
 import styles from "./index.scss?inline";
 
 /**

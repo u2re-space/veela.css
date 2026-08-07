@@ -12,22 +12,22 @@
     "compilerOptions": {
         "outDir": "./dist/",
         "paths": {
-            "fest/*": [
+            "@fest-lib/*": [
                 "../../shared/fest/*"
             ],
-            "fest/cdnImport": [
+            "@fest-lib/cdnImport": [
                 "../../cdnImport.mjs"
             ],
-            "fest/dom": [
+            "@fest-lib/dom": [
                 "../../shared/fest/dom/index.ts"
             ],
-            "fest/core": [
+            "@fest-lib/core": [
                 "../../shared/fest/core/index.ts"
             ],
-            "fest/veela": [
+            "@fest-lib/veela": [
                 "./src/ts/index.ts"
             ],
-            "fest/veela-runtime": [
+            "@fest-lib/veela-runtime": [
                 "./src/scss/runtime/index.ts"
             ],
             "veela-lib": [
