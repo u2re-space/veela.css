@@ -13,28 +13,36 @@
         "outDir": "./dist/",
         "paths": {
             "@fest-lib/*": [
-                "../../shared/fest/*"
+                "../../shared/fest/*",
+                "./node_modules/@fest-lib/*"
             ],
             "@fest-lib/cdnImport": [
-                "../../cdnImport.mjs"
+                "../../cdnImport.mjs",
+                "./node_modules/@fest-lib/cdnImport"
             ],
             "@fest-lib/dom": [
-                "../../shared/fest/dom/index.ts"
+                "../../shared/fest/dom/index.ts",
+                "./node_modules/@fest-lib/dom/src/index.ts"
             ],
             "@fest-lib/core": [
-                "../../shared/fest/core/index.ts"
+                "../../shared/fest/core/index.ts",
+                "./node_modules/@fest-lib/core/src/index.ts"
             ],
             "@fest-lib/veela": [
-                "./src/ts/index.ts"
+                "./src/ts/index.ts",
+                "./node_modules/@fest-lib/veela/src/index.ts"
             ],
             "@fest-lib/veela-runtime": [
-                "./src/scss/runtime/index.ts"
+                "./src/scss/runtime/index.ts",
+                "./node_modules/@fest-lib/veela-runtime/src/index.ts"
             ],
             "veela-lib": [
-                "./src/scss/lib/index.scss"
+                "./src/scss/lib/index.scss",
+                "./node_modules/@fest-lib/veela-lib/src/index.ts"
             ],
             "veela-lib/*": [
-                "./src/scss/lib/*"
+                "./src/scss/lib/*",
+                "./node_modules/@fest-lib/veela-lib/*/src/index.ts"
             ]
         },
         "target": "ESNext",

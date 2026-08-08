@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["./src"],
-  "entryPointStrategy": "expand",
+  "entryPoints": ["./src/scss/index.ts"],
+  "entryPointStrategy": "resolve",
   "out": "./docs",
   "tsconfig": "./tsconfig.json",
   "plugin": ["typedoc-plugin-markdown"],

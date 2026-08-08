@@ -1,7 +1,7 @@
 {
     "name": "@fest-lib/veela",
     "description": "Veela CSS framework and runtime loaders (fest-lib)",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "MIT",
     "type": "module",
     "sideEffects": true,
@@ -42,7 +42,8 @@
         "./package.json": "./package.json"
     },
     "peerDependencies": {
-        "@fest-lib/dom": "^0.1.0"
+        "@fest-lib/core": ">=0.1.0",
+        "@fest-lib/dom": ">=0.1.0"
     },
     "scripts": {
         "test": "npm run test:puppeteer",
@@ -53,13 +54,14 @@
         "watch": "vite build --watch",
         "build": "vite build --config vite.config.js && npm run docs && npm run docs:md",
         "build:publish": "FEST_NPM_IMPORTS=1 vite build --config vite.config.js",
-        "publish": "npm install -D typedoc typedoc-plugin-markdown && npm audit fix && npm run build && npm publish --access public",
         "prepack": "npm run build:publish",
-        "preview": "vite preview",
-        "docs": "typedoc ./src/index.ts --options ./typedoc.json --out ./docs --tsconfig ./tsconfig.json --excludeExternals --excludePrivate --excludeProtected --skipErrorChecking",
+        "docs": "typedoc ./src/scss/index.ts --options ./typedoc.json --out ./docs --tsconfig ./tsconfig.json --excludeExternals --excludePrivate --excludeProtected --skipErrorChecking",
         "docs:clean": "rm -rf ./docs && typedoc --options ./typedoc.json",
         "docs:md": "typedoc --options ./typedoc.md.json",
-        "docs:md:clean": "rm -rf ./docs-md && typedoc --options ./typedoc.md.json"
+        "docs:md:clean": "rm -rf ./docs-md && typedoc --options ./typedoc.md.json",
+        "preview": "vite preview",
+        "release": "PUPPETEER_SKIP_DOWNLOAD=1 npm run build:publish && npm publish --access public --ignore-scripts",
+        "publish": "npm run release"
     },
     "devDependencies": {
         "cssnano": ">=7.1.0",
@@ -70,14 +72,12 @@
         "postcss-preset-env": ">=10.2.4",
         "puppeteer": ">=24.42.0",
         "sass": ">=1.93.3",
+        "typedoc": "^0.28.20",
+        "typedoc-plugin-markdown": "^4.12.0",
         "typescript": ">=6.0.0-beta",
         "vite": ">=8.0.7",
         "vite-plugin-dynamic-import": ">=1.6.0",
         "vite-plugin-external": ">=6.2.2",
         "vite-plugin-optimizer": ">=1.4.3"
-    },
-    "dependencies": {
-        "@fest-lib/core": "github:fest-live/core.ts#main",
-        "@fest-lib/dom": "github:fest-live/dom.ts#main"
     }
 }

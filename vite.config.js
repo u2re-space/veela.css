@@ -30,6 +30,12 @@ export default defineConfig(async () => {
     if (base.rollupOptions) base.rollupOptions.input = entry;
     if (base.optimizeDeps) base.optimizeDeps.entries = [entry];
 
+    // WHY: lightningcss warns/fails on CSS `@function` (Veela wavy-step); keep CSS unminified.
+    base.build = {
+        ...base.build,
+        cssMinify: false
+    };
+
     return {
         ...base,
         plugins: [...(base?.plugins || [])],
