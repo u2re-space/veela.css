@@ -11,6 +11,7 @@
     ],
     "compilerOptions": {
         "outDir": "./dist/",
+        "rootDir": "../",
         "paths": {
             "@fest-lib/*": [
                 "../../shared/fest/*"
