@@ -13,36 +13,28 @@
         "outDir": "./dist/",
         "paths": {
             "@fest-lib/*": [
-                "../../shared/fest/*",
-                "./node_modules/@fest-lib/*"
+                "../../shared/fest/*"
             ],
             "@fest-lib/cdnImport": [
-                "../../cdnImport.mjs",
-                "./node_modules/@fest-lib/cdnImport"
+                "../../cdnImport.mjs"
             ],
             "@fest-lib/dom": [
-                "../../shared/fest/dom/index.ts",
-                "./node_modules/@fest-lib/dom/src/index.ts"
+                "../../shared/fest/dom/index.ts"
             ],
             "@fest-lib/core": [
-                "../../shared/fest/core/index.ts",
-                "./node_modules/@fest-lib/core/src/index.ts"
+                "../../shared/fest/core/index.ts"
             ],
             "@fest-lib/veela": [
-                "./src/ts/index.ts",
-                "./node_modules/@fest-lib/veela/src/index.ts"
+                "./src/ts/index.ts"
             ],
             "@fest-lib/veela-runtime": [
-                "./src/scss/runtime/index.ts",
-                "./node_modules/@fest-lib/veela-runtime/src/index.ts"
+                "./src/scss/runtime/index.ts"
             ],
             "veela-lib": [
-                "./src/scss/lib/index.scss",
-                "./node_modules/@fest-lib/veela-lib/src/index.ts"
+                "./src/scss/lib/index.scss"
             ],
             "veela-lib/*": [
-                "./src/scss/lib/*",
-                "./node_modules/@fest-lib/veela-lib/*/src/index.ts"
+                "./src/scss/lib/*"
             ]
         },
         "target": "ESNext",
@@ -62,11 +54,12 @@
         "allowUnreachableCode": true,
         "allowUnusedLabels": true,
         "noImplicitAny": false,
-        "declaration": false,
         "noImplicitThis": false,
+        "declaration": true,
+        "declarationMap": true,
         "inlineSources": true,
         "inlineSourceMap": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "typeRoots": [
             "plugins/global.d.ts"
         ],
