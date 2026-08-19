@@ -231,19 +231,19 @@ $selectors: $md-roots;
 
         --color-surface-container-lowest: light-dark(
             --u2-color-mod(var(--base-color-neutralized), 30),
-            --u2-color-mod(var(--base-color-neutralized), 980)
+            --u2-color-mod(var(--base-color-neutralized), 990)
         );
         --color-surface-container-low: light-dark(
             --u2-color-mod(var(--base-color-neutralized), 20),
-            --u2-color-mod(var(--base-color-neutralized), 970)
+            --u2-color-mod(var(--base-color-neutralized), 980)
         );
         --color-surface-container: light-dark(
             --u2-color-mod(var(--base-color-neutralized), 10),
-            --u2-color-mod(var(--base-color-neutralized), 960)
+            --u2-color-mod(var(--base-color-neutralized), 970)
         );
         --color-surface-container-high: light-dark(
             --u2-color-mod(var(--base-color-neutralized), 5),
-            --u2-color-mod(var(--base-color-neutralized), 950)
+            --u2-color-mod(var(--base-color-neutralized), 960)
         );
         --color-surface-container-highest: light-dark(
             --u2-color-mod(var(--base-color-neutralized), 2),
@@ -520,11 +520,11 @@ $selectors: $md-roots;
     --color-on-surface-variant: --u2-color-mod(var(--base-color), 700);
     --color-outline: --u2-color-mod(var(--base-color), 300);
     --color-outline-variant: --u2-color-mod(var(--base-color), 400);
-    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 2);
-    --color-surface-container-low: --u2-color-mod(var(--base-color), 10);
+    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 40);
+    --color-surface-container-low: --u2-color-mod(var(--base-color), 30);
     --color-surface-container: --u2-color-mod(var(--base-color), 20);
-    --color-surface-container-high: --u2-color-mod(var(--base-color), 30);
-    --color-surface-container-highest: --u2-color-mod(var(--base-color), 40);
+    --color-surface-container-high: --u2-color-mod(var(--base-color), 5);
+    --color-surface-container-highest: --u2-color-mod(var(--base-color), 2);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 75%, transparent);
     @include -theme-aliases;
 }
@@ -673,7 +673,7 @@ $selectors: $md-roots;
         --z-toast: 800;
         --z-max: 9999;
 
-        --view-bg: var(--color-surface);
+        --view-bg: var(--color-container);
         --view-fg: var(--color-on-surface);
         --view-border: var(--color-outline-variant);
         --view-input-bg: light-dark(

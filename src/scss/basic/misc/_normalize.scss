@@ -41,8 +41,8 @@
         --color-primary: light-dark(#91b6e3, #2e3a64);
         --base-color: var(--color-primary);
         --color-bg: light-dark(
-            --u2-color-mod(var(--base-color), 70),
-            --u2-color-mod(var(--base-color), 940)
+            --u2-color-mod(var(--base-color), 20),
+            --u2-color-mod(var(--base-color), 980)
         );
         --color-text: light-dark(
             --u2-color-mod(var(--base-color), 900),
