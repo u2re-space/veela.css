@@ -11,9 +11,9 @@
         display: flex;
         place-content: center;
         place-items: center;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 1 / 1 !important;
         inline-size: stretch;
-        block-size: stretch;
+        block-size: fit-content;
         padding: 1.25rem;
 
         // Containment & Overflow
@@ -36,7 +36,11 @@
         // Nested elements
         & span, & ui-icon {
             inline-size: stretch;
-            block-size: stretch;
+            block-size: fit-content;
+        }
+
+        & ui-icon {
+            aspect-ratio: 1 / 1 !important;
         }
     }
 
@@ -61,7 +65,7 @@
         &[data-shape] {
             contain: strict;
             overflow: hidden;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1 / 1 !important;
             pointer-events: auto;
             touch-action: none;
         }

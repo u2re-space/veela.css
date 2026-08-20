@@ -512,8 +512,9 @@
         /* -------------------------------------------------------------------------- */
 
         :where(canvas):is([is="ui-canvas"]) {
-            position: absolute;
+            position: fixed;
             inset: 0;
+            inset-block-end: auto;
             pointer-events: none;
             z-index: 0;
             padding: 0px;
@@ -521,10 +522,10 @@
             border: none 0px transparent;
             outline: none 0px transparent;
 
-            inline-size: stretch;
-            block-size: stretch;
-            max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            max-block-size: min(100%, min(100cqb, 100dvb)) !important;
+            max-inline-size: max(100%, min(100cqi, 100lvi)) !important;
+            max-block-size: max(100%, min(100cqb, 100lvb)) !important;
+            max-inline-size: max(100%, min(100cqi, 100lvi)) !important;
+            max-block-size: max(100%, min(100cqb, 100lvb)) !important;
             box-sizing: border-box !important;
             min-inline-size: 0px;
             min-block-size: 0px;
