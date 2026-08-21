@@ -25,6 +25,7 @@
 
 @use "./config" as config;
 @use "./color-properties";
+@use "layers";
 
 // Design tokens: SCSS aliases for CSS custom properties
 // Keep aliases small and meaningful to encourage reuse
@@ -559,8 +560,6 @@ $selectors: $md-roots;
     @include -theme-aliases;
 }
 
-@layer tokens, base, layout, utilities, shells, shell, views, view, viewer, components, ux-layer, markdown, essentials, print, print-breaks, overrides;
-
 @layer tokens {
     :root,
     :host,
@@ -631,6 +630,20 @@ $selectors: $md-roots;
         --text-xl: 1.25rem;
         --text-2xl: 1.6rem;
         --text-3xl: 2rem;
+
+        /*
+         * Component foundation tokens. Keep these namespaced at root scope;
+         * `ui-icon` maps them to its internal `--icon-*` variables only on
+         * the component host, so a window titlebar cannot resize its content.
+         */
+        --ui-icon-size: 1.25rem;
+        --ui-icon-padding: 0px;
+        --ui-icon-tile-padding: 0.45rem;
+        --ui-window-icon-size: 0.95rem;
+        --ui-explorer-icon-size: 1.5rem;
+        --ui-explorer-icon-track: 2rem;
+        --ui-explorer-action-icon-size: 1.15rem;
+        --ui-explorer-row-height: 2.875rem;
 
         --font-size-xs: 0.75rem;
         --font-size-sm: 0.875rem;

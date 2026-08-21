@@ -49,15 +49,15 @@
 
             //
             min-inline-size: min(100cqi, 100dvi);
-            min-block-size: min(100cqb, 100dvb);
+            min-block-size: min(100cqb, var(--lv-height, 100lvb));
 
             //
             inline-size: stretch;
-            block-size: stretch;
+            block-size: var(--lv-height, 100lvb);
 
             //
             max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            max-block-size: min(100%, min(100cqb, 100dvb)) !important;
+            max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb))) !important;
 
             //
             place-content: start;
@@ -116,7 +116,7 @@
 
                 //
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
 
             //
@@ -126,13 +126,13 @@
                 min-inline-size: 0px;
                 min-block-size: 0px;
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
 
             //
             & > :where(*) {
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
         }
         
@@ -184,15 +184,15 @@
 
             //
             min-inline-size: min(100cqi, 100dvi);
-            min-block-size: min(100cqb, 100dvb);
+            min-block-size: min(100cqb, var(--lv-height, 100lvb));
 
             //
             inline-size: stretch;
-            block-size: stretch;
+            block-size: var(--lv-height, 100lvb);
 
             //
             max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            max-block-size: min(100%, min(100cqb, 100dvb)) !important;
+            max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb))) !important;
 
             //
             place-content: start;
@@ -248,7 +248,7 @@
 
                 //
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
 
             //
@@ -258,13 +258,13 @@
                 min-inline-size: 0px;
                 min-block-size: 0px;
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
 
             //
             & > :where(*) {
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, 100dvb));
+                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
         }
     };

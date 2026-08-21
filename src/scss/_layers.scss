@@ -1,16 +1,42 @@
-/**
- * Veela CSS Layer Order
- *
- * Defines the cascade layer order for all veela style variants.
- * Imported by core/basic/advanced/beercss entry points.
+/*
+ * Filename: _layers.scss
+ * FullPath: modules/projects/veela.css/src/scss/_layers.scss
+ * Reason for changes: One cascade-order registry shared by veela, icon.ts,
+ * fl.ui, and the Explorer view hosts.
  */
 
+/*
+ * INVARIANT: legacy layer names remain in the registry while their consumers
+ * migrate. New component rules use the `ux-*` names; no host may establish a
+ * competing layer order by importing a second prelude.
+ */
 @layer
     ux-normalize,
+    tokens,
     ux-tokens,
+    base,
     ux-base,
+    layout,
     ux-layout,
+    shells,
+    shell,
+    views,
+    view,
+    viewer,
+    components,
     ux-components,
+    ux-layer,
+    ui-icon,
+    ui-icon-reset,
+    ux-file-manager,
+    ux-file-manager-content,
+    utilities,
     ux-utilities,
+    theme,
     ux-theme,
+    markdown,
+    essentials,
+    print,
+    print-breaks,
+    overrides,
     ux-overrides;

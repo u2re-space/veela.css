@@ -5,6 +5,7 @@
  * Reason for changes: vl-basic palette via --u2-color-mod (token names kept).
  */
 @use "./shared" as *;
+@use "layers";
 
 // COMPAT: vl-basic may load without veela _tokens.scss — keep function local.
 @#{"function --u2-color-mod(--base-color <color>, --index <number> : 550) returns <color>"} {
@@ -25,8 +26,6 @@
         h
     );
 }
-
-@layer tokens, base, layout, utilities, shells, shell, views, view, viewer, components, ux-layer, markdown, essentials, print, print-breaks, overrides;
 
 @layer tokens {
     :where(:root, html) {
@@ -148,7 +147,7 @@
             margin: 0;
             padding: 0;
             border: none;
-            min-block-size: min(100dvb, 100cqb);
+            min-block-size: min(var(--lv-height, 100lvb), 100cqb);
             block-size: fit-content;
             background: var(--color-bg);
             color: var(--color-text);
