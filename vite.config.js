@@ -1,8 +1,8 @@
 /*
  * Filename: vite.config.js
  * FullPath: modules/projects/veela.css/vite.config.js
- * Change date and time: 21.41.00_07.08.2026
- * Reason for changes: Call initiate(NAME) so dist emits veela.js; keep HTTP/port overrides.
+ * Change date and time: 22.15.00_22.08.2026
+ * Reason for changes: Sass loadPaths so @use "layers" resolves during npm publish build.
  */
 import { resolve } from "node:path";
 import { readFile } from "node:fs/promises";
@@ -38,6 +38,21 @@ export default defineConfig(async () => {
 
     return {
         ...base,
+        css: {
+            ...base.css,
+            preprocessorOptions: {
+                ...base.css?.preprocessorOptions,
+                scss: {
+                    ...base.css?.preprocessorOptions?.scss,
+                    /* WHY: `_tokens.scss` uses @use "layers"; file lives at src/scss/_layers.scss. */
+                    loadPaths: [
+                        resolve(__dirname, "./src/scss"),
+                        resolve(__dirname, "./src/scss/core"),
+                        ...(base.css?.preprocessorOptions?.scss?.loadPaths || [])
+                    ]
+                }
+            }
+        },
         plugins: [...(base?.plugins || [])],
         server: {
             ...(base?.server ?? {}),

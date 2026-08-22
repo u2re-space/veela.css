@@ -1,8 +1,20 @@
-# 🌸 Veela.CSS 🌸
+# Veela.CSS
+
+`@fest-lib/veela` — CSS/SCSS design system and runtime loaders for fest-lib. Tokens (`--c2-surface`, spacing, radius, type) plus Agate.UX oriented-space helpers. Token values live in SCSS; this README is the concept map.
+
+```bash
+npm install @fest-lib/veela
+```
+
+```ts
+import { /* runtime loaders */ } from "@fest-lib/veela";
+```
+
+SCSS: `@fest-lib/veela/scss/*`. Peers: `@fest-lib/core`, `dom`, `object`, `lure`.
 
 ---
 
-## 🛠️ Implementation Details
+## Implementation Details
 
 - **Transforms:** `self-size-x`/`self-size-y` = `100%` (client-space)
 - **Insets/Sizing:** `self-size-x`/`self-size-y` = offset parent size
