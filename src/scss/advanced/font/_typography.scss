@@ -428,32 +428,33 @@ $font-weight-extrabold: md3-font-weight-value("extrabold");
 
     @each $alias, $definition in $sizes {
         $value: md3-resolve-type-value($definition, size);
-        --font-size-#{$alias}: #{$value};
-    }
-
-    --font-size: var(--font-size-base);
-
-    @each $alias in map.keys($sizes) {
-        --font-#{$alias}: var(--font-size-#{$alias});
+        --md3-font-size-#{$alias}: #{$value};
+        @if $alias != xs and $alias != sm and $alias != base and $alias != md and $alias != lg and $alias != xl and $alias != 2xl {
+            --font-size-#{$alias}: #{$value};
+            --font-#{$alias}: var(--font-size-#{$alias});
+        }
     }
 
     @each $alias, $definition in $weights {
         $value: md3-font-weight-value($definition);
-        --font-weight-#{$alias}: #{$value};
+        @if $alias != normal and $alias != medium and $alias != semibold and $alias != bold {
+            --font-weight-#{$alias}: #{$value};
+        }
     }
 
     --font-weight: var(--font-weight-normal);
 
     @each $alias, $stack in $families {
-        --font-family-#{$alias}: #{md3-font-family-value($stack)};
+        --md3-font-family-#{$alias}: #{md3-font-family-value($stack)};
+        @if $alias != base and $alias != sans and $alias != mono {
+            --font-family-#{$alias}: #{md3-font-family-value($stack)};
+        }
     }
 
-    --font-family-base: #{md3-font-family-value("base")};
-    --font-family-mono: #{md3-font-family-value("mono")};
-    --font-family: var(--font-family-base);
-
     @each $alias, $value in $leadings {
-        --leading-#{$alias}: #{$value};
+        @if $alias != tight and $alias != normal and $alias != relaxed {
+            --leading-#{$alias}: #{$value};
+        }
     }
 
     @if meta.type-of($extra-overrides) == "map" {

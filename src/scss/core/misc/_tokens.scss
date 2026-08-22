@@ -1,8 +1,8 @@
 /*
  * Filename: _tokens.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
- * Change date and time: 12.30.00_06.08.2026
- * Reason for changes: Unify all color tokens — this file is the SINGLE SOURCE OF TRUTH for color token defaults across veela, fl.ui, and app shells/views.
+ * Change date and time: 15.12.00_22.08.2026
+ * Reason for changes: Android 17 / M3 Expressive lean — shape scale, 48dp touch, state layers, emphasized motion aliases.
  */
 
 /*
@@ -293,33 +293,7 @@ $selectors: $md-roots;
             --u2-color-mod(var(--base-color-neutralized), 620)
         );
 
-        /* Elevation */
-        --elev-0: 0 0 0 0 rgba(0, 0, 0, 0%);
-        --elev-1: 0 1px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-        --elev-2: 0 2px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 6px 0 rgba(0, 0, 0, 0.11);
-        --elev-3: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 6px 12px 0 rgba(0, 0, 0, 0.11);
-        --elev-4: 0 6px 8px 0 rgba(0, 0, 0, 0.14), 0 9px 18px 0 rgba(0, 0, 0, 0.11);
-
-        /* Motion and transitions */
-        --motion-fast: 140ms ease;
-        --motion-normal: 200ms ease;
-        --motion-slow: 300ms ease;
-
-        /* Spacing */
-        --space-xs: 0.25rem;
-        --space-sm: 0.5rem;
-        --space-md: 0.75rem;
-        --space-lg: 1rem;
-        --space-xl: 1.5rem;
-        --space-2xl: 2rem;
-
-        /* Radius */
-        --radius-xs: 0.25rem;
-        --radius-sm: 0.375rem;
-        --radius-md: 0.5rem;
-        --radius-lg: 0.75rem;
-        --radius-xl: 1rem;
-        --radius-full: 9999px;
+        /* Layout/motion inherit :root @layer tokens — do not fork scales here. */
 
         /* Legacy color mappings for markdown compatibility */
         --focus-outlineColor: var(--color-primary);
@@ -490,6 +464,14 @@ $selectors: $md-roots;
     --color-text: var(--color-on-background);
     --color-fg: var(--color-on-surface);
     --on-surface-color: var(--color-on-surface);
+    --surface-color: var(--color-surface);
+    --fl-surface: var(--color-surface);
+    --fl-on-surface: var(--color-on-surface);
+    --fl-primary: var(--color-primary);
+    --fl-on-primary: var(--color-on-primary);
+    --fl-secondary: var(--color-secondary);
+    --fl-on-secondary: var(--color-on-secondary);
+    --fl-shadow-xl: var(--shadow-xl);
     --on-surface-variant: var(--color-on-surface-variant);
     --wf-md-surface: var(--color-surface);
     --wf-md-on-surface: var(--color-on-surface);
@@ -570,6 +552,7 @@ $selectors: $md-roots;
         /* Default = light concrete; OS-dark media + data-theme pins override below. */
         @include -theme-light;
 
+        --space-2xs: 0.125rem;
         --space-xs: 0.25rem;
         --space-sm: 0.5rem;
         --space-md: 0.75rem;
@@ -598,15 +581,27 @@ $selectors: $md-roots;
         --gap-xl: var(--space-xl);
         --gap-2xl: var(--space-2xl);
 
+        /*
+         * Shape scale — M3 Expressive / Android 16–17 (dp≈rem at 16px).
+         * extra-small 4, small 8, medium 12, large 16, extra-large 28, full pill.
+         * `--radius-sm` stays 4dp so dense chrome does not jump.
+         */
         --radius-none: 0;
+        --radius-xs: 0.25rem;
         --radius-sm: 0.25rem;
         --radius-default: 0.25rem;
-        --radius-md: 0.375rem;
-        --radius-lg: 0.5rem;
-        --radius-xl: 0.75rem;
-        --radius-2xl: 1rem;
-        --radius-3xl: 1.5rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-2xl: 1.75rem;
+        --radius-3xl: 2rem;
         --radius-full: 9999px;
+        --shape-extra-small: var(--radius-xs);
+        --shape-small: var(--radius-md);
+        --shape-medium: var(--radius-lg);
+        --shape-large: var(--radius-xl);
+        --shape-extra-large: var(--radius-2xl);
+        --shape-full: var(--radius-full);
 
         --elev-0: none;
         --elev-1: 0 1px 1px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -631,6 +626,15 @@ $selectors: $md-roots;
         --text-2xl: 1.6rem;
         --text-3xl: 2rem;
 
+        /* COMPAT: SCSS $font-* aliases and older sheets resolve these names. */
+        --font-xs: var(--text-xs);
+        --font-sm: var(--text-sm);
+        --font-base: var(--text-base);
+        --font-md: var(--text-base);
+        --font-lg: var(--text-lg);
+        --font-xl: var(--text-xl);
+        --font-2xl: var(--text-2xl);
+
         /*
          * Component foundation tokens. Keep these namespaced at root scope;
          * `ui-icon` maps them to its internal `--icon-*` variables only on
@@ -644,6 +648,9 @@ $selectors: $md-roots;
         --ui-explorer-icon-track: 2rem;
         --ui-explorer-action-icon-size: 1.15rem;
         --ui-explorer-row-height: 2.875rem;
+        --icon-size-sm: var(--ui-icon-size);
+        --icon-size-md: var(--ui-icon-size);
+        --icon-size-lg: var(--ui-explorer-icon-size);
 
         --font-size-xs: 0.75rem;
         --font-size-sm: 0.875rem;
@@ -657,6 +664,7 @@ $selectors: $md-roots;
         --font-weight-bold: 700;
 
         --font-family: "Roboto", ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+        --font-family-base: var(--font-family);
         --font-family-mono: "Roboto Mono", "SF Mono", Monaco, Inconsolata, "Fira Code", monospace;
         --font-sans: var(--font-family);
         --font-mono: var(--font-family-mono);
@@ -665,13 +673,20 @@ $selectors: $md-roots;
         --leading-normal: 1.5;
         --leading-relaxed: 1.8;
 
-        --transition-fast: 120ms cubic-bezier(0.2, 0, 0, 1);
-        --transition-normal: 160ms cubic-bezier(0.2, 0, 0, 1);
-        --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
-
+        --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+        --ease-expressive: cubic-bezier(0.34, 1.25, 0.64, 1);
+        --duration-fast: 140ms;
+        --duration-normal: 220ms;
+        --duration-slow: 360ms;
+        --transition-fast: var(--duration-fast) var(--ease-emphasized);
+        --transition-normal: var(--duration-normal) var(--ease-emphasized);
+        --transition-slow: var(--duration-slow) var(--ease-emphasized);
         --motion-fast: var(--transition-fast);
         --motion-normal: var(--transition-normal);
         --motion-slow: var(--transition-slow);
+        --ease-out: cubic-bezier(0, 0, 0.2, 1);
+        --ease-in: cubic-bezier(0.4, 0, 1, 1);
+        --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
         --focus-ring: 0 0 0 3px color-mix(in oklab, var(--color-primary) 35%, transparent);
 
@@ -747,9 +762,10 @@ $selectors: $md-roots;
         --color-fg: var(--color-on-surface, var(--color-on-surface));
         --color-fg-muted: var(--color-on-surface-variant, var(--color-on-surface-variant));
 
+        --touch-min: 3rem;
         --btn-height-sm: 2rem;
-        --btn-height-md: 2.5rem;
-        --btn-height-lg: 3rem;
+        --btn-height-md: var(--touch-min);
+        --btn-height-lg: 3.5rem;
         --btn-padding-x-sm: var(--space-md);
         --btn-padding-x-md: var(--space-lg);
         --btn-padding-x-lg: 1.5rem;
@@ -757,8 +773,13 @@ $selectors: $md-roots;
         --btn-font-weight: var(--font-weight-medium);
 
         --input-height-sm: 2rem;
-        --input-height-md: 2.5rem;
-        --input-height-lg: 3rem;
+        --input-height-md: var(--touch-min);
+        --input-height-lg: 3.5rem;
+        --state-opacity-hover: 0.08;
+        --state-opacity-press: 0.12;
+        --state-opacity-focus: 0.12;
+        --state-opacity-disabled: 0.38;
+        --state-opacity-drag: 0.16;
         --input-padding-x: var(--space-md);
         --input-radius: var(--radius-md);
         --input-border-color: var(--color-border, var(--color-border));
@@ -929,6 +950,9 @@ $selectors: $md-roots;
             --motion-fast: 0ms;
             --motion-normal: 0ms;
             --motion-slow: 0ms;
+            --duration-fast: 0ms;
+            --duration-normal: 0ms;
+            --duration-slow: 0ms;
         }
     }
 

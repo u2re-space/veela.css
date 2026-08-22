@@ -135,7 +135,10 @@ $md3-transition-aliases: (
 
 @mixin _export-duration-vars($durations) {
     @each $token, $value in $durations {
-        --duration-#{$token}: #{$value};
+        --md3-duration-#{$token}: #{$value};
+        @if $token != fast and $token != normal and $token != slow {
+            --duration-#{$token}: #{$value};
+        }
     }
 }
 
@@ -153,11 +156,14 @@ $md3-transition-aliases: (
 
 @mixin _export-transition-vars($definitions, $aliases) {
     @each $name, $config in $definitions {
-        --transition-#{$name}: #{_transition-definition($config)};
+        --md3-transition-#{$name}: #{_transition-definition($config)};
+        @if $name != fast and $name != normal and $name != slow {
+            --transition-#{$name}: #{_transition-definition($config)};
+        }
     }
 
     @each $alias, $target in $aliases {
-        @if map.has-key($definitions, $target) {
+        @if $alias != fast and $alias != normal and $alias != slow and map.has-key($definitions, $target) {
             --transition-#{$alias}: var(--transition-#{$target});
         }
     }

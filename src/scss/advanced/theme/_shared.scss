@@ -202,7 +202,7 @@
  * @param $radius [var(--radius-sm, 8px)] - border radius
  * @usage: @include focus-ring(var(--color-primary));
  */
-@mixin focus-ring($color: var(--color-primary, #0066cc), $radius: var(--radius-sm, 8px)) {
+@mixin focus-ring($color: var(--color-primary, #5a7fff), $radius: var(--radius-sm)) {
     outline: none;
     box-shadow: 0 0 0 3px color-mix(in oklab, $color 35%, transparent);
     border-radius: $radius;

@@ -89,13 +89,7 @@
 // Export layout vars mixin
 @mixin md3-export-density-vars() {
     @each $token, $value in $md3-space-scale {
-        --space-#{$token}: #{$value};
-        --gap-#{$token}: #{$value};
-        --padding-#{$token}: #{$value};
-    }
-
-    @each $token, $value in $md3-shape-scale {
-        --radius-#{$token}: #{$value};
+        --md3-space-#{$token}: #{$value};
     }
 }
 
@@ -155,33 +149,6 @@
     // Spacing tokens
     @each $token, $value in $md3-space-scale {
         --space-#{$token}-base: #{$value};
-        --space-#{$token}: var(--space-#{$token}-base);
-        --gap-#{$token}: var(--space-#{$token});
-        --padding-#{$token}: var(--space-#{$token});
-    }
-
-
-    //
-    @each $alias, $token in $md3-radius-aliases {
-        --radius-#{$alias}: var(--radius-#{$token}, #{md3-radius($token)});
-    }
-
-    // Radius tokens
-    @each $token, $value in $md3-radius-scale {
-        --radius-#{$token}: #{$value};
-    }
-
-    --radius-full: #{md3-radius(full)};
-
-
-    //
-    @each $alias, $token in $md3-shape-aliases {
-        --shape-#{$alias}: var(--shape-#{$token}, #{md3-shape($token)});
-    }
-
-    // Shape tokens
-    @each $token, $value in $md3-shape-scale {
-        --shape-#{$token}: #{$value};
     }
 
 
@@ -197,18 +164,6 @@
     --avatar-size-sm: #{md3-avatar-size(sm)};
     --avatar-size: #{md3-avatar-size(md)};
     --avatar-size-lg: #{md3-avatar-size(lg)};
-
-    // Typography scale
-    --text-xs: clamp(calc(0.7rem * var(--font-scale)), 0.3cqi + 0.6rem, calc(0.75rem * var(--font-scale)));
-    --text-sm: clamp(calc(0.75rem * var(--font-scale)), 0.4cqi + 0.65rem, calc(0.85rem * var(--font-scale)));
-    --text-base: clamp(calc(0.8rem * var(--font-scale)), 0.5cqi + 0.7rem, calc(0.95rem * var(--font-scale)));
-    --text-lg: clamp(calc(0.9rem * var(--font-scale)), 0.6cqi + 0.8rem, calc(1.1rem * var(--font-scale)));
-    --text-xl: clamp(calc(1rem * var(--font-scale)), 0.8cqi + 0.9rem, calc(1.3rem * var(--font-scale)));
-
-    // Motion tokens
-    --transition-fast: 140ms ease;
-    --transition-normal: 160ms ease;
-    --transition-slow: 200ms ease;
 
     --text-opacity-disabled: #{md3-state(disabled)};
 }
@@ -390,13 +345,7 @@ $is-windowed: "@container u2-windowed #{$is-not-wide}";
 // Export layout vars mixin
 @mixin md3-export-density-vars() {
     @each $token, $value in $md3-space-scale {
-        --space-#{$token}: #{$value};
-        --gap-#{$token}: #{$value};
-        --padding-#{$token}: #{$value};
-    }
-
-    @each $token, $value in $md3-shape-scale {
-        --radius-#{$token}: #{$value};
+        --md3-space-#{$token}: #{$value};
     }
 }
 
@@ -456,33 +405,6 @@ $is-windowed: "@container u2-windowed #{$is-not-wide}";
     // Spacing tokens
     @each $token, $value in $md3-space-scale {
         --space-#{$token}-base: #{$value};
-        --space-#{$token}: var(--space-#{$token}-base);
-        --gap-#{$token}: var(--space-#{$token});
-        --padding-#{$token}: var(--space-#{$token});
-    }
-
-
-    //
-    @each $alias, $token in $md3-radius-aliases {
-        --radius-#{$alias}: var(--radius-#{$token}, #{md3-radius($token)});
-    }
-
-    // Radius tokens
-    @each $token, $value in $md3-radius-scale {
-        --radius-#{$token}: #{$value};
-    }
-
-    --radius-full: #{md3-radius(full)};
-
-
-    //
-    @each $alias, $token in $md3-shape-aliases {
-        --shape-#{$alias}: var(--shape-#{$token}, #{md3-shape($token)});
-    }
-
-    // Shape tokens
-    @each $token, $value in $md3-shape-scale {
-        --shape-#{$token}: #{$value};
     }
 
 
@@ -498,18 +420,6 @@ $is-windowed: "@container u2-windowed #{$is-not-wide}";
     --avatar-size-sm: #{md3-avatar-size(sm)};
     --avatar-size: #{md3-avatar-size(md)};
     --avatar-size-lg: #{md3-avatar-size(lg)};
-
-    // Typography scale
-    --text-xs: clamp(calc(0.7rem * var(--font-scale)), 0.3cqi + 0.6rem, calc(0.75rem * var(--font-scale)));
-    --text-sm: clamp(calc(0.75rem * var(--font-scale)), 0.4cqi + 0.65rem, calc(0.85rem * var(--font-scale)));
-    --text-base: clamp(calc(0.8rem * var(--font-scale)), 0.5cqi + 0.7rem, calc(0.95rem * var(--font-scale)));
-    --text-lg: clamp(calc(0.9rem * var(--font-scale)), 0.6cqi + 0.8rem, calc(1.1rem * var(--font-scale)));
-    --text-xl: clamp(calc(1rem * var(--font-scale)), 0.8cqi + 0.9rem, calc(1.3rem * var(--font-scale)));
-
-    // Motion tokens
-    --transition-fast: 140ms ease;
-    --transition-normal: 160ms ease;
-    --transition-slow: 200ms ease;
 
     --text-opacity-disabled: #{md3-state(disabled)};
 }

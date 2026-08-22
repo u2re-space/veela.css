@@ -895,18 +895,18 @@ $is-windowed: "@container u2-windowed #{$is-not-wide}";
 @mixin surface($tone: 0) {
     // Fallback surface colors using CSS variables
     // Can be overridden by any theming system
-    background-color: var(--fl-surface, #fff);
-    color: var(--fl-on-surface, #111);
+    background-color: var(--color-surface, var(--fl-surface, #fff));
+    color: var(--color-on-surface, var(--fl-on-surface, #111));
 }
 
 @mixin primary-surface {
-    background-color: var(--fl-primary, #1a73e8);
-    color: var(--fl-on-primary, #fff);
+    background-color: var(--color-primary, var(--fl-primary, #5a7fff));
+    color: var(--color-on-primary, var(--fl-on-primary, #fff));
 }
 
 @mixin secondary-surface {
-    background-color: var(--fl-secondary, #5f6368);
-    color: var(--fl-on-secondary, #fff);
+    background-color: var(--color-secondary, var(--fl-secondary, #5f6368));
+    color: var(--color-on-secondary, var(--fl-on-secondary, #fff));
 }
 
 // Border mixins - veela-independent fallbacks

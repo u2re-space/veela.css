@@ -1,8 +1,7 @@
 /*
  * Filename: _layers.scss
  * FullPath: modules/projects/veela.css/src/scss/_layers.scss
- * Reason for changes: One cascade-order registry shared by veela, icon.ts,
- * fl.ui, and the Explorer view hosts.
+ * Reason for changes: One cascade-order registry; include view-transitions before overrides.
  */
 
 /*
@@ -38,5 +37,6 @@
     essentials,
     print,
     print-breaks,
+    view-transitions,
     overrides,
     ux-overrides;
