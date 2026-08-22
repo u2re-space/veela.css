@@ -1,8 +1,8 @@
 /*
  * Filename: _tokens.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
- * Change date and time: 15.12.00_22.08.2026
- * Reason for changes: Android 17 / M3 Expressive lean — shape scale, 48dp touch, state layers, emphasized motion aliases.
+ * Change date and time: 15.50.00_22.08.2026
+ * Reason for changes: Desktop fallback seed is calm cyan-blue `#5a9ec8` (Material You overrides on Cap).
  */
 
 /*
@@ -547,7 +547,7 @@ $selectors: $md-roots;
     :host,
     :scope {
         /* Box seed; WallpaperTheme may override --color-primary on :root. */
-        --color-primary: #5a7fff;
+        --color-primary: #5a9ec8;
         color-scheme: light dark;
         /* Default = light concrete; OS-dark media + data-theme pins override below. */
         @include -theme-light;
@@ -880,7 +880,7 @@ $selectors: $md-roots;
         --sv-outline: var(--color-outline-variant, light-dark(#c5cdd8, #3d4755));
         --sv-surface-1: var(--color-surface-container-low, light-dark(#ffffff, #171c24));
         --sv-surface-2: var(--color-surface-container, light-dark(#f4f6fa, #1c232d));
-        --sv-primary: var(--base-color, var(--color-primary, #5a7fff));
+        --sv-primary: var(--base-color, var(--color-primary, #5a9ec8));
         --sv-danger: var(--color-error, #d32f2f);
 
         /* ── History-view semantic tokens (`--vh-*`) ──────────────────────

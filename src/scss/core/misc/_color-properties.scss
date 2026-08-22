@@ -1,8 +1,8 @@
 /*
  * Filename: _color-properties.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_color-properties.scss
- * Change date and time: 09.05.00_02.08.2026
- * Reason for changes: Only seed hues as @property — semantic light-dark() must stay unregistered.
+ * Change date and time: 15.50.00_22.08.2026
+ * Reason for changes: Seed initial-value is the desktop cyan-blue fallback (#5a9ec8).
  */
 
 /*
@@ -18,13 +18,13 @@
 @property --color-primary {
     syntax: "<color>";
     inherits: true;
-    initial-value: #5a7fff;
+    initial-value: #5a9ec8;
 }
 
 @property --base-color {
     syntax: "<color>";
     inherits: true;
-    initial-value: #5a7fff;
+    initial-value: #5a9ec8;
 }
 
 @property --color-secondary {
