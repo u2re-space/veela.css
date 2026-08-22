@@ -1,8 +1,8 @@
 /*
  * Filename: _tokens.scss
  * FullPath: modules/projects/veela.css/src/scss/core/misc/_tokens.scss
- * Change date and time: 15.50.00_22.08.2026
- * Reason for changes: Desktop fallback seed is calm cyan-blue `#5a9ec8` (Material You overrides on Cap).
+ * Change date and time: 22.30.00_22.08.2026
+ * Reason for changes: Light/dark primary-container so Start plates and chrome ink flip.
  */
 
 /*
@@ -480,6 +480,8 @@ $selectors: $md-roots;
     --wf-md-surf-container-low: var(--color-surface-container-low);
     --wf-md-surf-container-high: var(--color-surface-container-high);
     --wf-md-outline-variant: var(--color-outline-variant);
+    --md3-primary-container: var(--color-primary-container);
+    --md-primary-container: var(--color-primary-container);
 }
 
 /** Light surfaces — always light chrome; hue from --base-color / wallpaper. */
@@ -508,6 +510,9 @@ $selectors: $md-roots;
     --color-surface-container: --u2-color-mod(var(--base-color), 20);
     --color-surface-container-high: --u2-color-mod(var(--base-color), 5);
     --color-surface-container-highest: --u2-color-mod(var(--base-color), 2);
+    /* WHY: Start/AppMenu plates used a dark 880 fallback when this token was missing. */
+    --color-primary-container: --u2-color-mod(var(--base-color), 160);
+    --color-on-primary-container: --u2-color-mod(var(--base-color), 900);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 75%, transparent);
     @include -theme-aliases;
 }
@@ -538,6 +543,8 @@ $selectors: $md-roots;
     --color-surface-container: --u2-color-mod(var(--base-color), 960);
     --color-surface-container-high: --u2-color-mod(var(--base-color), 980);
     --color-surface-container-highest: --u2-color-mod(var(--base-color), 1000);
+    --color-primary-container: --u2-color-mod(var(--base-color), 820);
+    --color-on-primary-container: --u2-color-mod(var(--base-color), 100);
     --color-border: color-mix(in oklab, var(--color-outline-variant) 70%, transparent);
     @include -theme-aliases;
 }
