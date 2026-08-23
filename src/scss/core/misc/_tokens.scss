@@ -211,6 +211,9 @@ $selectors: $md-roots;
         --color-primary: light-dark(#2e3a64, #91b6e3);
         --base-color: var(--color-primary);
         --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
+        /* WHY: wallpaper paper (achromatic L) + ink over the photo — JS (WallpaperTheme) overwrites. */
+        --wallpaper-underlying-color: --u2-color-mod(var(--base-color-neutralized), 940);
+        --wallpaper-contrast-color: --u2-color-mod(var(--base-color-neutralized), 70);
         --color-secondary: light-dark(
             --u2-color-mod(var(--base-color), 420),
             --u2-color-mod(var(--base-color), 680)
@@ -455,6 +458,9 @@ $selectors: $md-roots;
 @mixin -theme-seed-bridge {
     --base-color: var(--color-primary);
     --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
+    /* WHY: CSS fallback only — WallpaperTheme inline hex wins for photo paper/ink. */
+    --wallpaper-underlying-color: --u2-color-mod(var(--base-color-neutralized), 940);
+    --wallpaper-contrast-color: --u2-color-mod(var(--base-color-neutralized), 70);
     --wf-md-primary: var(--color-primary);
     --wf-md-seed: var(--base-color);
 }
@@ -858,16 +864,15 @@ $selectors: $md-roots;
         --faint-sidebar-bg: var(--color-surface-container-high);
 
         /* ── Environment-shell tokens (color subset) ──────────────────────────
-         * `--env-status-fg` / `--env-launcher-fg*` are concrete defaults: the
-         * overlay status/launcher sit on wallpaper, so they carry their own
-         * luminance values (wallpaper probe may override on `:root`).
+         * `--env-status-fg` follows window chrome. `--env-launcher-fg*` aliases
+         * `--wallpaper-contrast-color` / paper (WallpaperTheme + statusbar luma).
          * Non-color `--env-*` (z-index, safe-area, insets) stay in environment-shell.
          */
         --env-status-fg: light-dark(#1c1c1e, #f5f5f7);
         --env-status-fg-muted: color-mix(in oklab, var(--env-status-fg) 78%, transparent);
-        --env-launcher-fg: #f7f7f8;
-        --env-launcher-fg-shadow: rgb(0 0 0 / 0.88);
-        --env-launcher-fg-glow: rgb(0 0 0 / 0.45);
+        --env-launcher-fg: var(--wallpaper-contrast-color);
+        --env-launcher-fg-shadow: color-mix(in oklab, var(--wallpaper-underlying-color) 88%, transparent);
+        --env-launcher-fg-glow: color-mix(in oklab, var(--wallpaper-underlying-color) 48%, transparent);
 
         /* ── fl.ui `--error-color` alias ────────────────────────────────────
          * Canonical alias so fl.ui/components can consume `var(--error-color)`

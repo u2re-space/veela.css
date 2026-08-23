@@ -11,8 +11,9 @@
  * color. Children that lock `color-scheme: light` then get cream surfaces (local light-dark) but
  * keep light-on-dark text from the inherited computed token — Settings Appearance labels vanish.
  *
- * Seeds only: WallpaperTheme / Quick Settings write these; surfaces derive via unregistered
- * `light-dark(--u2-color-mod(...))` in `_tokens.scss` and re-evaluate per used color-scheme.
+ * Seeds only: WallpaperTheme / Quick Settings write these (plus `--wallpaper-*` paper/ink);
+ * surfaces derive via unregistered `light-dark(--u2-color-mod(...))` in `_tokens.scss`
+ * and re-evaluate per used color-scheme.
  */
 
 @property --color-primary {
@@ -25,6 +26,18 @@
     syntax: "<color>";
     inherits: true;
     initial-value: #5a9ec8;
+}
+
+@property --wallpaper-underlying-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #16161a;
+}
+
+@property --wallpaper-contrast-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #f7f7f8;
 }
 
 @property --color-secondary {
