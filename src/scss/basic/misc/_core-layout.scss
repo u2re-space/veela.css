@@ -127,6 +127,9 @@
                 min-block-size: 0px;
                 max-inline-size: min(100%, min(100cqi, 100dvi));
                 max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                background-color: transparent;
+                border: none 0px transparent;
+                outline: none 0px transparent;
             }
 
             //

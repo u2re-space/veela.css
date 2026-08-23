@@ -519,8 +519,9 @@
             z-index: 0;
             padding: 0px;
             margin: 0px;
-            border: none 0px transparent;
-            outline: none 0px transparent;
+            border: none 0px transparent !important;
+            outline: none 0px transparent !important;
+            background-color: transparent !important;
 
             max-inline-size: max(100%, min(100cqi, 100lvi)) !important;
             max-block-size: max(100%, min(100cqb, 100lvb)) !important;

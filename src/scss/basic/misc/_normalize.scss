@@ -140,6 +140,10 @@
             font-size: 16px;
             line-height: 1.5;
             dynamic-range-limit: no-limit;
+            background: none;
+            background-color: transparent;
+            border: none 0px transparent;
+            outline: none 0px transparent;
         }
 
         :where(body) {
@@ -155,6 +159,10 @@
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
             dynamic-range-limit: no-limit;
+            background: none;
+            background-color: transparent;
+            border: none 0px transparent;
+            outline: none 0px transparent;
         }
 
         :where(ul, ol) {
@@ -709,12 +717,14 @@
             z-index: 0;
             padding: 0;
             margin: 0;
-            border: none;
             max-inline-size: max(100%, min(100cqi, 100lvi)) !important;
             max-block-size: max(100%, min(100cqb, 100lvb)) !important;
             max-inline-size: max(100%, min(100cqi, 100lvi)) !important;
             max-block-size: max(100%, min(100cqb, 100lvb)) !important;
             box-sizing: border-box !important;
+            background-color: transparent !important;
+            border: none 0px transparent !important;
+            outline: none 0px transparent !important;
             min-inline-size: 0;
             min-block-size: 0;
             object-fit: cover;
