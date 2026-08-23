@@ -20,8 +20,8 @@
         contain: strict;
         overflow: hidden;
 
-        // Rendering
-        border-radius: 1.5rem;
+        // WHY: per-shape `--border-radius` (circle 50%, squircle 28%) was ignored — hardcoded 1.5rem won.
+        border-radius: var(--border-radius, 1.5rem);
         //clip-path: var(--clip-path, none);
         z-index: 1;
 
