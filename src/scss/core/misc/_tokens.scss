@@ -844,16 +844,16 @@ $selectors: $md-roots;
          * is the single value source. Shells keep only theme/state overrides and
          * documented offline/SSR hex fallbacks for when veela is not loaded.
          */
-        --shell-bg: var(--color-surface);
-        --shell-fg: var(--color-on-surface);
-        --shell-nav-bg: var(--color-surface-container-high);
-        --shell-nav-fg: var(--color-on-surface);
-        --shell-nav-border: var(--color-outline-variant);
-        --shell-btn-hover: var(--color-surface-container);
-        --shell-btn-active-bg: color-mix(in oklab, var(--color-primary) 18%, var(--color-surface));
-        --shell-btn-active-fg: var(--color-on-surface);
-        --shell-status-bg: var(--color-surface-container-low);
-        --shell-status-fg: var(--color-on-surface);
+        --shell-bg: var(--sv-surface-2, var(--color-surface));
+        --shell-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-nav-bg: var(--sv-surface-2, var(--color-surface-container-high));
+        --shell-nav-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-nav-border: var(--sv-outline-variant, var(--color-outline-variant));
+        --shell-btn-hover: var(--sv-surface-2, var(--color-surface-container));
+        --shell-btn-active-bg: color-mix(in oklab, var(--color-primary) 18%, var(--sv-surface-2, var(--color-surface)));
+        --shell-btn-active-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-status-bg: var(--sv-surface-1, var(--color-surface-container-low));
+        --shell-status-fg: var(--sv-on-surface, var(--color-on-surface));
 
         /* ── Faint shell tokens (subsystem boot shells) ───────────────────────
          * Derived from canonical `--color-*`; previously duplicated as
@@ -886,10 +886,10 @@ $selectors: $md-roots;
          * only theme-pinned overrides (`html[data-theme]`) and shadow-DOM self-sufficiency
          * fallbacks at use sites (`var(--sv-*, light-dark(...))`).
          */
-        --sv-bg: var(--color-surface-container-low, light-dark(#eef1f6, #0f1318));
-        --sv-fg: var(--color-on-surface, light-dark(#12151a, #e8edf2));
-        --sv-muted: var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc));
-        --sv-outline: var(--color-outline-variant, light-dark(#c5cdd8, #3d4755));
+        --sv-bg: var(--sv-surface-2, var(--color-surface-container-low, light-dark(#eef1f6, #0f1318)));
+        --sv-fg: var(--sv-on-surface, var(--color-on-surface, light-dark(#12151a, #e8edf2)));
+        --sv-muted: var(--sv-on-surface-variant, var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc)));
+        --sv-outline: var(--sv-outline-variant, var(--color-outline-variant, light-dark(#c5cdd8, #3d4755)));
         --sv-surface-1: var(--color-surface-container-low, light-dark(#ffffff, #171c24));
         --sv-surface-2: var(--color-surface-container, light-dark(#f4f6fa, #1c232d));
         --sv-primary: var(--base-color, var(--color-primary, #5a9ec8));
