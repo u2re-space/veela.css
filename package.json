@@ -1,7 +1,7 @@
 {
     "name": "@fest-lib/veela",
     "description": "fest-lib Veela: CSS tokens, --c2 color functions, Agate.UX, SCSS + runtime loaders",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "license": "MIT",
     "type": "module",
     "sideEffects": true,
@@ -71,7 +71,7 @@
         "docs:md:clean": "rm -rf ./docs-md && typedoc --options ./typedoc.md.json",
         "preview": "vite preview",
         "release": "PUPPETEER_SKIP_DOWNLOAD=1 npm run build:publish && npm publish --access public --ignore-scripts",
-        "publish": "npm run release"
+        "publish": "node ../scripts/bump-patch-version.mjs && npm run release"
     },
     "devDependencies": {
         "cssnano": ">=7.1.0",
