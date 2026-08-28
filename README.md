@@ -1,545 +1,134 @@
-# Veela.CSS
+<p align="center">
+  <strong>@fest-lib/veela</strong><br>
+  Design tokens, <code>--c2-*</code> color functions, Agate.UX. Values live in SCSS — this file is the map.
+</p>
 
-`@fest-lib/veela` — CSS/SCSS design system and runtime loaders for fest-lib. Tokens (`--c2-surface`, spacing, radius, type) plus Agate.UX oriented-space helpers. Token values live in SCSS; this README is the concept map.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@fest-lib/veela"><img src="https://img.shields.io/npm/v/@fest-lib/veela?style=flat-square" alt="npm"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@fest-lib/veela?style=flat-square" alt="MIT"></a>
+  <a href="https://github.com/fest-live/veela.css"><img src="https://img.shields.io/github/stars/fest-live/veela.css?style=flat-square" alt="stars"></a>
+</p>
+
+Do not emit a second `:root` palette in apps. Consume tokens and override context (`var(--token, fallback)`). Token SoT: `src/scss` (`core/misc/_tokens.scss`).
+
+```text
+core · dom · object · lure
+ └── fest/veela       ← you are here
+      └── fl-ui · shells · apps
+```
+
+## Install
 
 ```bash
-npm install @fest-lib/veela
+npm install @fest-lib/core @fest-lib/dom @fest-lib/object @fest-lib/lure @fest-lib/veela
 ```
+
+Peers: `core`, `dom`, `object`, `lure` (`>=0.1.0`). The published tarball includes `dist/` **and** `src/scss/`.
+
+### Runtime (adopted / inline)
 
 ```ts
-import { /* runtime loaders */ } from "@fest-lib/veela";
+import initialize from "@fest-lib/veela";
+initialize();                    // loads bundled SCSS via @fest-lib/dom
 ```
 
-SCSS: `@fest-lib/veela/scss/*`. Peers: `@fest-lib/core`, `dom`, `object`, `lure`.
+Variants (from `src/scss/index.ts`):
 
----
+```ts
+import { loadVeelaVariant } from "@fest-lib/veela/scss/index.ts";
+// "core" | "basic" | "advanced" | "beercss"
+await loadVeelaVariant("advanced");
+```
 
-## Implementation Details
+In the workspace, FL.UI usually loads Veela for you (`configureFlUI({ styleVariant: "veela-advanced" })`).
 
-- **Transforms:** `self-size-x`/`self-size-y` = `100%` (client-space)
-- **Insets/Sizing:** `self-size-x`/`self-size-y` = offset parent size
-- **Transforms:** default to client-space unless transformed
-- **Inline/Block:** sizes/insets may swap in different writing modes
+### SCSS
 
----
+```scss
+@use "@fest-lib/veela/scss/core" as *;
 
-## 🏗️ Potential Implementations
+.card {
+    background: var(--c2-surface, var(--color-surface));
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+}
+```
 
-- **By layout:**
-  - Fixed/absolute (insets)
-  - CSS Houdini (layout worklets)
-- **By orientation:**
-  - `inline`/`block` with `writing-mode`/`direction`
-  - `transform`-based (`rotate`)
-  - Mixed/combined approaches
-
----
-
-## 🎨 Custom CSS Properties
-
-| Oriented-Space | Client-Space | Implementation-Dependent |
-|:--------------:|:------------:|:------------------------:|
-| `--os-inset-x` | `--cs-inset-x` | `--im-inset-x` |
-| `--os-inset-y` | `--cs-inset-y` | `--im-inset-y` |
-| `--os-drag-x`  | `--cs-drag-x`  | `--im-drag-x`  |
-| `--os-drag-y`  | `--cs-drag-y`  | `--im-drag-y`  |
-| `--os-size-x`  | `--cs-size-x`  | `--im-size-x`  |
-| `--os-size-y`  | `--cs-size-y`  | `--im-size-y`  |
-| `--os-self-size-x` | `--cs-self-size-x` | `--im-self-size-x` |
-| `--os-self-size-y` | `--cs-self-size-y` | `--im-self-size-y` |
-| `--os-offset-x` | `--cs-offset-x` | `--im-offset-x` |
-| `--os-offset-y` | `--cs-offset-y` | `--im-offset-y` |
-
-## 📏 Scaling
-
-Special versions of `getBoundingClientRect`, `clientX`, and `clientY` with virtual scaling support.
-
-**Scaling methods:**
-- CSS `zoom` (recommended)
-- CSS `scale` (legacy)
-- `rem`/`em` units
-
-
----
-
-## 🏙️ Agate.UX — Multi-dimensional UX/Interaction
-
-> **Agate.UX** is a next-gen sub-component for advanced UI/UX, designed for the "2REmembrance" generation (2025+).
-
-### 🧩 Key Concepts
-
-- **Orientation-based transforms:**
-  `calc(var(--orient, 0) * <A>)` where `<A>` can be `100grad`, `0.25turn`, `90deg`, etc.
-- **Self-centering elements:**
-  `translate(-50%, -50%)` with `transform-origin: 0px 0px;`
-- **Drag & center combined:**
-  `translate(calc(var(--drag-x, 0px) - 50%), calc(var(--drag-y, 0px) - 50%))`
-
-<details>
-<summary>How it works?</summary>
-
-#### Coordinate Spaces
-
-- <kbd>Client-Space</kbd>: page coordinate system
-- <kbd>Oriented-Space</kbd>: virtual screen
-- <kbd>Algorithm-Space</kbd>: internal logic
-
-#### Degree Types
-
-- <span style="background:#eee; border-radius:4px; padding:2px 6px;">90deg-based</span> (0°, 90°, 180°, 270°)
-- <span style="background:#eee; border-radius:4px; padding:2px 6px;">Variable/Matrix-based</span>
-
-#### Event Pre-computation
-
-- Client-Space Pointer Position
-- Oriented-Space Pointer Position
-- Algorithm-Space Pointer Position
-
-</details>
-
----
-
-## 🧭 Policy Concepts
-
-- Use `inset` for semi-static, `translate` for dynamic (drag/animation) positioning.
-
----
-
-## 1. Introduction
-
-Veela.CSS is a CSS framework for building modern, responsive, and accessible web applications. It is built on top of the veela.js library and provides a set of reusable components and utilities for building web applications.
-
-## 2. Features
-
-- Responsive design
-- Accessible components
-- Reusable utilities
-- Customizable theme
-- Built-in animations
-
-## 3. Architecture
-
-### Runtime side
-
-- Color functions
-- Atomic classes
-- Animation keyframes
-- Implementations (commons)
-
-### SCSS library
-
-- Theme mixins
-- Layout mixins
-- Utility mixins
-
-### Design types
-
-- VE design (default, but no priority)
-- Material Design 3 (not completed yet)
-
----
+Exports: `@fest-lib/veela/scss/*` → `src/scss/*`.
 
 ## Color functions
 
-Currently we used native CSS custom functions (and own implementations for veela.css runtime side).
+Native CSS custom functions (plus runtime fallbacks):
 
-- `--c2-surface(tone = 0, base-color = var(--current), scheme-id = 2)` - returns a surface color based on the tone, base color and theme id
-- `--c2-on-surface(tone = 0, base-color = var(--current), scheme-id = 2)` - returns a on-surface color based on the tone, base color and theme id
-- `--c2-contrast(tone = 0, base-color = var(--current), scheme-id = 2)` - returns a contrast color based on the tone, base color and theme id
-- `--c2-on-contrast(tone = 0, base-color = var(--current), scheme-id = 2)` - returns a on-contrast color based on the tone, base color and theme id
+| Function | Role |
+| --- | --- |
+| `--c2-surface(tone, base-color, scheme-id)` | surface |
+| `--c2-on-surface(...)` | ink on surface |
+| `--c2-contrast(...)` | contrast fill |
+| `--c2-on-contrast(...)` | ink on contrast |
 
-### Alpha channel
-
-- Can be got by relative color function, e.g. `oklch(from --c2-surface(tone = 0, base-color = var(--current), scheme-id = 2) l c h/ 0.5)`
-
-### Scheme ID
-
-- 0 - light
-- 1 - dark
-- 2 - default
-
-### Tone (of function argument)
-
-- 0% - light or black tone (depends on the scheme id)
-- 50% - chromatic tone (depends on the base color and scheme id)
-- 100% - white or white tone (depends on the scheme id)
-
-### Base color
-
-- `var(--current)` - the current color, default bound to primary color, but can be overridden by the user
-- `var(--primary)` - the primary color (in MD3 adapted under --current)
-- `var(--secondary)` - the secondary color (in MD3 adapted under --secondary)
-- `var(--accent)` - the accent color (in MD3 adapted under --accent)
-- `var(--success)` - the success color
-- `var(--warning)` - the warning color
-- `var(--error)` - the error color
-
-### Example
+- **scheme-id:** `0` light · `1` dark · `2` default (follow host).
+- **tone:** `0` black/white end · `50%` chroma · `100%` opposite end.
+- **base-color:** `var(--current)` (default), `--primary`, `--secondary`, `--accent`, `--success`, `--warning`, `--error`.
 
 ```css
-.example {
-    background-color: var(--c2-surface(tone = 0, base-color = var(--current), scheme-id = 2));
+.panel {
+    background: var(--c2-surface);
+    color: var(--c2-on-surface);
 }
 ```
 
-## Color theme mixins
+Alpha via relative color: `oklch(from var(--c2-surface) l c h / 0.5)`.
 
-- `@mixin solid-colorize(selector = "&", options: ("shade": 0.0, "tint": 0.0, "scheme-id": 2, "role": null))` - colorizes the selector with the given options
+### `solid-colorize` mixin
 
-### Options
-
-- `shade` - the shade of the color, default is 0.0
-- `tint` - the tint of the color, default is 0.0
-- `scheme-id` - the scheme id, default is 2
-    - 0 - light
-    - 1 - dark
-    - 2 - default
-- `role` - the role of the color, default is null
-    - MD3 specific, such as `primary`, `secondary`, `tertiary`, `error`, `surface`, `on-surface`, etc.
-    - null - no role, default to current color
-- `scope` - propagation mode, default is `"component"`
-    - `"component"` - applies the palette to the selector, supporting descendant form controls and global helpers (previous `solid-colorize` behaviour)
-    - `"selector"` - limits the palette to the selector itself without propagating to descendants (previous `solid-colorize-selector-only` behaviour)
-- `propagate` - optional boolean override for descendant propagation (defaults to the value implied by `scope`)
-- `forms-background` - controls whether interactive descendants receive the blended background colour (defaults to the value of `propagate`)
-- `global-targets` - toggles the additional global helpers (`::picker`, `ui-icon`, inline text tags) (defaults to the value of `propagate`)
-
-### Example
-
-```css
-.example {
-    @include solid-colorize(selector = "&", options: ("shade": 0.0, "tint": 0.0, "scheme-id": 2, "role": null));
-}
+```scss
+@include solid-colorize("&", (
+    "shade": 0,
+    "tint": 0,
+    "scheme-id": 2,
+    "role": null,
+    "scope": "component"   // or "selector"
+));
 ```
 
----
+`scope: "component"` paints descendants / form helpers; `"selector"` stays on the node.
 
-## Layout variables
+## Tokens (excerpt)
 
-**Padding variables (in rem):**
+Live numbers are in SCSS. Typical names:
 
-- `--padding-sm` - 0.25rem
-- `--padding-md` - 0.5rem
-- `--padding-lg` - 1rem
-- `--padding-xl` - 2rem
-- `--padding-2xl` - 4rem
-- `--padding-3xl` - 8rem
-- `--padding-4xl` - 16rem
-- `--padding-5xl` - 32rem
-- `--padding-6xl` - 64rem
-- `--padding-7xl` - 128rem
-- `--padding-8xl` - 256rem
-- `--padding-9xl` - 512rem
+| Kind | Examples |
+| --- | --- |
+| Space | `--space-xs` … `--space-2xl`, `--gap-*`, `--padding-*` |
+| Radius | `--radius-xs` … `--radius-2xl`, `--radius-full` |
+| Type | `--text-xs` … `--text-6xl`, `--leading-*`, `--font-weight-*` |
+| Motion | `--transition-fast` / `normal` / `slow` |
+| Shadow | `--shadow-sm` … `--shadow-2xl`, `--shadow-inset` |
+| Chrome | `--icon-size-*`, `--avatar-size`, `--border-width-*` |
 
-**Spacing variables (in rem):**
+Atomic utility classes (`.p-md`, `.gap-md`, `.d-flex`, `.text-sm`, `.shadow-sm`, `.color-primary`, `.surface-subtle`) ship with the stylesheet. Prefer tokens on components over class soup.
 
-- `--space-xs` - 0.25rem
-- `--space-sm` - 0.5rem
-- `--space-md` - 0.75rem
-- `--space-lg` - 1rem
-- `--space-xl` - 1.25rem
-- `--space-2xl` - 1.6rem
+## Agate.UX
 
-**Radius variables (in rem):**
+Oriented-space vs client-space vs implementation-space:
 
-- `--radius-xs` - 0.25rem
-- `--radius-sm` - 0.5rem
-- `--radius-md` - 0.75rem
-- `--radius-lg` - 0.85rem
-- `--radius-xl` - 1rem
-- `--radius-2xl` - 1.25rem
-- `--radius-full` - min(50dvmin, 50cqmin)
+| Oriented | Client | Impl |
+| --- | --- | --- |
+| `--os-inset-x/y` | `--cs-inset-x/y` | `--im-inset-x/y` |
+| `--os-drag-x/y` | `--cs-drag-x/y` | `--im-drag-x/y` |
+| `--os-size-x/y` | `--cs-size-x/y` | `--im-size-x/y` |
 
-**Gap variables (in rem):**
+Use `inset` for semi-static layout, `translate` for drag / animation. Orientation: `calc(var(--orient, 0) * 90deg)`. Measure in `@fest-lib/dom` Agate helpers.
 
-- `--gap-xs` - 0.25rem
-- `--gap-sm` - 0.5rem
-- `--gap-md` - 0.75rem
-- `--gap-lg` - 1rem
-- `--gap-xl` - 1.25rem
-- `--gap-2xl` - 1.6rem
+## Workspace
 
-**Font size variables (in rem):**
-
-- `--text-xs` - 0.7rem
-- `--text-sm` - 0.8rem
-- `--text-base` - 0.9rem
-- `--text-lg` - 1rem
-- `--text-xl` - 1.25rem
-- `--text-2xl` - 1.6rem
-- `--text-3xl` - 2rem
-- `--text-4xl` - 2.5rem
-- `--text-5xl` - 3rem
-- `--text-6xl` - 4rem
-
-**Line height variables:**
-
-- `--leading-tight` - 1.2
-- `--leading-normal` - 1.5
-- `--leading-relaxed` - 1.8
-
-**Font weight variables:**
-
-- `--font-weight-normal` - 400
-- `--font-weight-medium` - 500
-- `--font-weight-semibold` - 600
-- `--font-weight-bold` - 700
-
-**Font family variables:**
-
-- `--font-family` - 'Roboto', sans-serif
-- `--font-family-mono` - 'Roboto Mono', monospace
-- `--font-family-display` - 'Roboto Display', sans-serif
-- `--font-family-serif` - 'Roboto Serif', serif
-- `--font-family-handwriting` - 'Roboto Handwriting', cursive
-- `--font-family-fantasy` - 'Roboto Fantasy', fantasy
-- `--font-family-cursive` - 'Roboto Cursive', cursive
-- `--font-family-system` - system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
-
-**Transition variables:**
-
-- `--transition-fast` - 140ms ease
-- `--transition-normal` - 160ms ease
-- `--transition-slow` - 200ms ease
-
-**Interactive state variables:**
-
-- `--hover-lift` - 0.03
-- `--active-lift` - 0.05
-- `--focus-lift` - 0.02
-
-**Shadow variables:**
-
-- `--shadow-sm` - 0 1px 2px rgba(0, 0, 0, 0.05)
-- `--shadow-md` - 0 4px 6px rgba(0, 0, 0, 0.1)
-- `--shadow-lg` - 0 10px 15px rgba(0, 0, 0, 0.1)
-- `--shadow-xl` - 0 20px 25px rgba(0, 0, 0, 0.1)
-- `--shadow-2xl` - 0 25px 50px rgba(0, 0, 0, 0.1)
-- `--shadow-inset` - inset 0 1px 0 rgba(0, 0, 0, 0.05)
-- `--shadow-inset-strong` - inset 0 2px 6px rgba(0, 0, 0, 0.1)
-
-**Border width variables (in px):**
-
-- `--border-width-sm` - 0.5px
-- `--border-width-md` - 1px
-- `--border-width-lg` - 2px
-- `--border-width-xl` - 4px
-- `--border-width-2xl` - 8px
-- `--border-width-3xl` - 16px
-- `--border-width-4xl` - 32px
-- `--border-width-5xl` - 64px
-- `--border-width-6xl` - 128px
-- `--border-width-7xl` - 256px
-- `--border-width-8xl` - 512px
-- `--border-width-9xl` - 1024px
-
-## Avatar and icon sizes
-
-- `--avatar-size` - 48px
-- `--avatar-size-lg` - 64px
-- `--icon-size-sm` - 1rem
-- `--icon-size-md` - 1.25rem
-- `--icon-size-lg` - 1.5rem
-
-### Example
-
-```css
-.icon-size-sm {
-    inline-size: var(--icon-size-sm);
-    block-size: var(--icon-size-sm);
-}
-.icon-size-md {
-    inline-size: var(--icon-size-md);
-    block-size: var(--icon-size-md);
-}
-.icon-size-lg {
-    inline-size: var(--icon-size-lg);
-    block-size: var(--icon-size-lg);
-}
+```bash
+cd modules/projects/veela.css
+npm run demo             # Vite
+npm test                 # puppeteer
+npm run build
+npm run publish
 ```
 
----
-
-## Atomic classes
-
-### Padding
-
-- `.p-xs` - padding: `var(--padding-xs)`
-- `.p-sm` - padding: `var(--padding-sm)`
-- `.p-md` - padding: `var(--padding-md)`
-- `.p-lg` - padding: `var(--padding-lg)`
-- `.p-xl` - padding: `var(--padding-xl)`
-- `.p-2xl` - padding: `var(--padding-2xl)`
-- `.p-3xl` - padding: `var(--padding-3xl)`
-- `.p-4xl` - padding: `var(--padding-4xl)`
-- `.p-5xl` - padding: `var(--padding-5xl)`
-- `.p-6xl` - padding: `var(--padding-6xl)`
-- `.p-7xl` - padding: `var(--padding-7xl)`
-- `.p-8xl` - padding: `var(--padding-8xl)`
-- `.p-9xl` - padding: `var(--padding-9xl)`
-
-### Margin
-
-- `.m-xs` - margin: `var(--space-xs)`
-- `.m-sm` - margin: `var(--space-sm)`
-- `.m-md` - margin: `var(--space-md)`
-- `.m-lg` - margin: `var(--space-lg)`
-- `.m-xl` - margin: `var(--space-xl)`
-- `.m-2xl` - margin: `var(--space-2xl)`
-- `.m-3xl` - margin: `var(--space-3xl)`
-- `.m-4xl` - margin: `var(--space-4xl)`
-- `.m-5xl` - margin: `var(--space-5xl)`
-- `.m-6xl` - margin: `var(--space-6xl)`
-
-### Gap
-
-- `.gap-xs` - gap: `var(--gap-xs)`
-- `.gap-sm` - gap: `var(--gap-sm)`
-- `.gap-md` - gap: `var(--gap-md)`
-- `.gap-lg` - gap: `var(--gap-lg)`
-- `.gap-xl` - gap: `var(--gap-xl)`
-
-### Text size
-
-- `.text-xs` - font-size: `var(--text-xs)`
-- `.text-sm` - font-size: `var(--text-sm)`
-- `.text-base` - font-size: `var(--text-base)`
-- `.text-lg` - font-size: `var(--text-lg)`
-- `.text-xl` - font-size: `var(--text-xl)`
-
-### Font weight
-
-- `.font-weight-normal` - font-weight: `var(--font-weight-normal)`
-- `.font-weight-medium` - font-weight: `var(--font-weight-medium)`
-- `.font-weight-semibold` - font-weight: `var(--font-weight-semibold)`
-- `.font-weight-bold` - font-weight: `var(--font-weight-bold)`
-
-### Font family
-
-- `.font-family-sans-serif` - font-family: `var(--font-family-sans-serif)`
-- `.font-family-serif` - font-family: `var(--font-family-serif)`
-- `.font-family-monospace` - font-family: `var(--font-family-monospace)`
-- `.font-family-display` - font-family: `var(--font-family-display)`
-- `.font-family-handwriting` - font-family: `var(--font-family-handwriting)`
-
-### Line height
-
-- `.leading-tight` - line-height: `var(--leading-tight)`
-- `.leading-normal` - line-height: `var(--leading-normal)`
-- `.leading-relaxed` - line-height: `var(--leading-relaxed)`
-
-### Transition
-
-- `.transition-fast` - transition: `var(--transition-fast)`
-- `.transition-normal` - transition: `var(--transition-normal)`
-- `.transition-slow` - transition: `var(--transition-slow)`
-
-### Interactive state
-
-- `.hover-lift` - transform: `translateY(var(--hover-lift))`
-- `.active-lift` - transform: `translateY(var(--active-lift))`
-- `.focus-lift` - transform: `translateY(var(--focus-lift))`
-
-### Display
-
-- `.d-grid` - display: `grid`
-- `.d-flex` - display: `flex`
-- `.d-block` - display: `block`
-- `.d-inline` - display: `inline`
-- `.d-inline-block` - display: `inline-block`
-- `.d-inline-flex` - display: `inline-flex`
-- `.d-inline-grid` - display: `inline-grid`
-- `.d-none` - display: `none`
-- `.d-flex-col` - display: `flex-column`
-- `.d-flex-row` - display: `flex-row`
-- `.d-flex-col-reverse` - display: `flex-column-reverse`
-- `.d-flex-row-reverse` - display: `flex-row-reverse`
-- `.d-flex-wrap` - display: `flex-wrap`
-- `.d-flex-wrap-reverse` - display: `flex-wrap-reverse`
-
-### Shadow
-
-- `.shadow-sm` - box-shadow: `var(--shadow-sm)`
-
-### Examples of classes usage
-
-Grid with padding, margin, gap and `display: grid;`
-```html
-<div class="p-md m-md gap-md d-grid">
-    <div class="p-md m-md gap-md d-grid">
-        <div class="p-md m-md gap-md d-grid">
-        </div>
-        <div class="p-md m-md gap-md d-grid">
-        </div>
-    </div>
-</div>
-```
-
-Flexbox with padding, margin, gap and `display: flex;`
-
-```html
-<div class="p-md m-md gap-md d-flex">
-    <div class="p-md m-md gap-md d-flex">
-    </div>
-    <div class="p-md m-md gap-md d-flex">
-    </div>
-</div>
-```
-
----
-
-## MD3 color classes and variants
-
-### Color classes
-
-- `.color-primary` - color: `var(--color-primary)`
-- `.color-secondary` - color: `var(--color-secondary)`
-- `.color-accent` - color: `var(--color-accent)`
-- `.color-success` - color: `var(--color-success);`
-- `.color-warning` - color: `var(--color-warning);`
-- `.color-danger` - color: `var(--color-danger);`
-- `.color-info` - color: `var(--color-info);`
-
-### Surface classes
-
-- `.surface` - background-color: `var(--surface-color)`
-- `.surface-subtle` - background-color: `var(--surface-color-subtle)`
-- `.surface-muted` - background-color: `var(--surface-color-muted)`
-- `.surface-emphasis` - background-color: `var(--surface-color-emphasis)`
-- `.surface-strong` - background-color: `var(--surface-color-strong)`
-
-### Text classes
-
-- `.text-primary` - color: `var(--text-color-primary)`
-- `.text-secondary` - color: `var(--text-color-secondary)`
-- `.text-muted` - color: `var(--text-color-muted)`
-- `.text-disabled` - color: `var(--text-color-disabled)`
-
-### Validation state classes
-
-- `.state-success` - color: `var(--color-success)`
-- `.state-warning` - color: `var(--color-warning)`
-- `.state-danger` - color: `var(--color-danger)`
-
-### Examples of classes usage
-
-```html
-<div class="color-primary surface-subtle">
-    <div class="text-primary state-success">
-    </div>
-</div>
-```
-
-```html
-<div class="color-secondary surface-emphasis">
-    <div class="text-secondary state-warning">
-    </div>
-</div>
-```
-
-```html
-<div class="color-accent surface-strong">
-    <div class="text-accent state-danger">
-    </div>
-</div>
-```
+Guide: `guide/`. License: [MIT](LICENSE).
