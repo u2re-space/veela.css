@@ -2,7 +2,7 @@
  * Shared types and probes for manual (`npm run dev`) and headless (`?veela_ci=1` / Puppeteer).
  */
 
-import { loadVeelaVariant } from "../../src/scss/runtime/index";
+import { loadVeelaVariant } from "modules/projects/veela.css/scss/runtime/index.js";
 
 
 export interface TestCase {

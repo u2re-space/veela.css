@@ -22,6 +22,9 @@
             "@fest-lib/dom": [
                 "../../shared/fest/dom/index.ts"
             ],
+            "@fest-lib/style-lib": [
+                "../../shared/fest/style-lib/index.ts"
+            ],
             "@fest-lib/core": [
                 "../../shared/fest/core/index.ts"
             ],
