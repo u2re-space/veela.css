@@ -1,7 +1,7 @@
 {
     "name": "@fest-lib/veela",
     "description": "fest-lib Veela: CSS tokens, --c2 color functions, Agate.UX, SCSS + runtime loaders",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "license": "MIT",
     "type": "module",
     "sideEffects": true,
@@ -39,6 +39,8 @@
             "default": "./dist/veela.js"
         },
         "./scss": "./src/scss/index.scss",
+        "./scss/index.scss": "./src/scss/index.scss",
+        "./scss/*": "./src/scss/*",
         "./scss/core": "./src/scss/core/index.scss",
         "./scss/basic": "./src/scss/basic/index.scss",
         "./scss/interact": "./src/scss/interact/index.scss",
