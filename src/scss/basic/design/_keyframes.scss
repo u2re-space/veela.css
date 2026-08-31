@@ -1,4 +1,4 @@
-@layer animations {
+@layer theme {
     @mixin rotate-spin($name) {
         @keyframes #{$name} {
             from {

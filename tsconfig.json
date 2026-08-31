@@ -32,13 +32,13 @@
                 "./src/ts/index.ts"
             ],
             "@fest-lib/veela-runtime": [
-                "./src/scss/runtime/index.ts"
+                "./src/scss/index.ts"
             ],
             "veela-lib": [
-                "./src/scss/lib/index.scss"
+                "./src/scss/index.scss"
             ],
             "veela-lib/*": [
-                "./src/scss/lib/*"
+                "./src/scss/*"
             ]
         },
         "target": "ESNext",

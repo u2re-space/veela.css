@@ -1,1 +1,13 @@
-@forward "misc/index.scss";
+/*
+ * Filename: index.scss
+ * FullPath: modules/projects/veela.css/src/scss/core/index.scss
+ * Reason for changes: Flatten the core SCSS surface behind one canonical entry.
+ */
+
+@forward "./config";
+@forward "./functions";
+@forward "./mixins";
+@forward "./properties";
+@forward "./tokens";
+@forward "./icons";
+@forward "../interact";

@@ -1,0 +1,913 @@
+/*
+ * Filename: _tokens.scss
+ * FullPath: modules/projects/veela.css/src/scss/core/_tokens.scss
+ * Change date and time: 22.30.00_22.08.2026
+ * Reason for changes: Light/dark primary-container so Start plates and chrome ink flip.
+ */
+
+/*
+ * INVARIANT: This is the canonical color-token registry for the full veela bundle.
+ * All color token DEFAULTS live here on `:root, :host, :scope`.
+ * - The core entry-point owns every default; basic and theme modules consume it.
+ * - Component/shell/view styles may only provide scoped semantic aliases.
+ * - Component/shell/view files keep only context overrides and shadow-DOM
+ *   `var(--token, light-dark(...))` fallbacks; they never redefine a canonical default.
+ */
+
+@use "./config" as config;
+@use "./color-properties";
+@use "./color-mod";
+@use "../layers";
+
+// Design tokens: SCSS aliases for CSS custom properties
+// Keep aliases small and meaningful to encourage reuse
+
+$space-2xs: var(--space-2xs);
+$space-xs: var(--space-xs);
+$space-sm: var(--space-sm);
+$space-md: var(--space-md);
+$space-lg: var(--space-lg);
+$space-xl: var(--space-xl);
+$space-2xl: var(--space-2xl);
+
+$radius-xs: var(--radius-xs);
+$radius-sm: var(--radius-sm);
+$radius-md: var(--radius-md);
+$radius-lg: var(--radius-lg);
+$radius-xl: var(--radius-xl);
+$radius-full: var(--radius-full);
+
+$font-xs: var(--font-xs);
+$font-sm: var(--font-sm);
+$font-base: var(--font-base);
+$font-md: var(--font-md);
+$font-lg: var(--font-lg);
+$font-xl: var(--font-xl);
+$font-2xl: var(--font-2xl);
+
+$font-weight-normal: var(--font-weight-normal);
+$font-weight-medium: var(--font-weight-medium);
+$font-weight-semibold: var(--font-weight-semibold);
+$font-weight-bold: var(--font-weight-bold);
+$font-weight-extrabold: var(--font-weight-extrabold);
+
+$font-family-base: var(--font-family-base);
+$font-family-mono: var(--font-family-mono);
+
+$color-primary: var(--md3-primary);
+$color-primary-container: var(--md3-primary-container);
+$color-secondary: var(--md3-secondary);
+$color-tertiary: var(--md3-tertiary);
+$color-surface: var(--md3-surface);
+$color-surface-variant: var(--md3-surface-variant);
+$color-surface-container: var(--md3-surface-container);
+$color-outline: var(--md3-outline);
+$color-outline-variant: var(--md3-outline-variant);
+$color-error: var(--md3-error);
+$color-inverse-surface: var(--md3-inverse-surface);
+$color-inverse-on-surface: var(--md3-inverse-on-surface);
+$color-scrim: var(--md3-scrim);
+
+// Common color variables (compat layer for reducing --c2-* usage)
+$on-surface: var(--on-surface, currentColor);
+$text-secondary: var(--text-secondary, color-mix(in oklch, var(--on-surface, currentColor) 74%, transparent));
+$border-color: var(--border-color, color-mix(in oklch, var(--on-surface, currentColor) 18%, transparent));
+$backdrop: var(--backdrop, oklch(from black l c h / 0.22));
+
+// Scrollbar
+$scrollbar-opacity: var(--scrollbar-opacity, 0.56);
+$scrollbar-tint: var(--scrollbar-tint, 86%);
+
+// Stacking (use with lib/basic/_position.scss — overlays, modals)
+$z-modal-backdrop: var(--z-modal-backdrop);
+$z-modal: var(--z-modal);
+
+/* ==========================================================================
+    Meta / Declarations
+   ========================================================================== */
+$line-height-base: config.md-config("layout", "line-height");
+$heading-padding-inline: config.md-config("heading", "padding");
+$heading-padding-inline-small: config.md-config("heading", "padding-small");
+$blockquote-margin-inline: config.md-config("blockquote", "margin-inline");
+$blockquote-padding-inline: config.md-config("blockquote", "padding-inline");
+$table-padding: config.md-config("table", "cell-padding");
+$img-max-width: config.md-config("media", "img-max-width");
+$md-roots: ":host, .markdown-body, #markdown, md-view, #raw-md, .markdown-viewer, .print-view, .markdown-viewer-container .viewer-content .markdown-viewer-content, .cw-view-viewer__prose, :host, .markdown-body, #markdown, md-view, #raw-md, .markdown-viewer, .print-view, .markdown-viewer-container .viewer-content .markdown-viewer-content, .cw-view-viewer__prose";
+$selectors: $md-roots;
+
+
+/* ==========================================================================
+    Tokens / Mixins (global, not layered)
+   ========================================================================== */
+
+@mixin markdown-root-props(
+    $selector: ":where(#{$selectors}):not([hidden])"
+) {
+    #{$selector} {
+        /* Base sizes */
+        --base-size-4: 0.25em;
+        --base-size-8: 0.5em;
+        --base-size-16: 1em;
+        --base-size-24: 1.5em;
+        --base-size-40: 2.5em;
+
+        /* Typography */
+        --base-text-weight-normal: 400;
+        --base-text-weight-medium: 500;
+        --base-text-weight-semibold: 600;
+        --fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+
+        /*
+         * Color system — seeds + --u2-color-mod (pivot 550).
+         * Neutrals from --base-color ← --color-primary; semantics keep own seeds.
+         */
+        --color-primary: light-dark(#2e3a64, #91b6e3);
+        --base-color: var(--color-primary);
+        --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
+        /* WHY: wallpaper paper (achromatic L) + ink over the photo — JS (WallpaperTheme) overwrites. */
+        --wallpaper-underlying-color: --u2-color-mod(var(--base-color-neutralized), 940);
+        --wallpaper-contrast-color: --u2-color-mod(var(--base-color-neutralized), 70);
+        --color-secondary: light-dark(
+            --u2-color-mod(var(--base-color), 420),
+            --u2-color-mod(var(--base-color), 680)
+        );
+        --color-accent: light-dark(
+            --u2-color-mod(var(--base-color), 400),
+            --u2-color-mod(var(--base-color), 700)
+        );
+        --color-success: light-dark(#10b981, --u2-color-mod(#10b981, 480));
+        --color-warning: light-dark(#f59e0b, --u2-color-mod(#f59e0b, 480));
+        --color-error: light-dark(#ef4444, --u2-color-mod(#ef4444, 480));
+        --color-info: light-dark(#60a5fa, --u2-color-mod(#60a5fa, 480));
+
+        /* Surface colors */
+        --color-surface: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 10),
+            --u2-color-mod(var(--base-color-neutralized), 980)
+        );
+
+        --color-surface-container-lowest: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 30),
+            --u2-color-mod(var(--base-color-neutralized), 990)
+        );
+        --color-surface-container-low: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 20),
+            --u2-color-mod(var(--base-color-neutralized), 980)
+        );
+        --color-surface-container: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 10),
+            --u2-color-mod(var(--base-color-neutralized), 970)
+        );
+        --color-surface-container-high: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 5),
+            --u2-color-mod(var(--base-color-neutralized), 960)
+        );
+        --color-surface-container-highest: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 2),
+            --u2-color-mod(var(--base-color-neutralized), 940)
+        );
+
+        /* Text colors */
+        --color-on-surface: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 900),
+            --u2-color-mod(var(--base-color-neutralized), 100)
+        );
+        --color-on-surface-variant: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 700),
+            --u2-color-mod(var(--base-color-neutralized), 280)
+        );
+        --color-on-primary: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 40),
+            --u2-color-mod(var(--base-color-neutralized), 40)
+        );
+        --color-on-secondary: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 40),
+            --u2-color-mod(var(--base-color-neutralized), 920)
+        );
+
+        /* Border and outline */
+        --color-outline: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 100),
+            --u2-color-mod(var(--base-color-neutralized), 900)
+        );
+        --color-outline-variant: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 100),
+            --u2-color-mod(var(--base-color-neutralized), 900)
+        );
+
+        /* Interactive states */
+        --hover: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 160),
+            --u2-color-mod(var(--base-color-neutralized), 780)
+        );
+        --active: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 220),
+            --u2-color-mod(var(--base-color-neutralized), 840)
+        );
+        --focus: light-dark(
+            --u2-color-mod(var(--base-color-neutralized), 200),
+            --u2-color-mod(var(--base-color-neutralized), 620)
+        );
+
+        /* Layout/motion inherit :root @layer tokens — do not fork scales here. */
+
+        /* Legacy color mappings for markdown compatibility */
+        --focus-outlineColor: var(--color-primary);
+        --fgColor-default: var(--color-on-surface);
+        --fgColor-muted: var(--color-on-surface-variant);
+        --fgColor-accent: var(--color-accent);
+        --fgColor-success: var(--color-success);
+        --fgColor-attention: var(--color-warning);
+        --fgColor-danger: var(--color-error);
+        --fgColor-done: var(--color-info);
+        --bgColor-default: var(--color-surface);
+        --bgColor-muted: var(--color-surface-container);
+        --bgColor-neutral-muted: var(--color-surface-container-high);
+        --bgColor-attention-muted: var(--color-warning);
+        --borderColor-default: var(--color-outline);
+        --borderColor-muted: var(--color-outline-variant);
+        --borderColor-neutral-muted: var(--color-outline);
+        --borderColor-accent-emphasis: var(--color-primary);
+        --borderColor-success-emphasis: var(--color-success);
+        --borderColor-attention-emphasis: var(--color-warning);
+        --borderColor-danger-emphasis: var(--color-error);
+        --borderColor-done-emphasis: var(--color-info);
+
+        /* Markdown tokens (overrides) */
+        --active-brightness: #{config("effects", "active-brightness")};
+        --border-radius: #{config("shape", "border-radius")};
+        --box-shadow: #{config("shape", "box-shadow")};
+        --color-accent: #{light-dark("accent")};
+        --color-bg: #{light-dark("bg")};
+        --color-bg-secondary: #{light-dark("bg-secondary")};
+        --color-link: #{light-dark("link")};
+        --color-secondary: #{light-dark("secondary")};
+        --color-secondary-accent: #{light-dark("secondary-accent")};
+        --color-shadow: #{light-dark("shadow")};
+        --color-table: #{light-dark("table")};
+        --color-text: #{light-dark("text")};
+        --color-text-secondary: #{light-dark("text-secondary")};
+        --color-scrollbar: #{light-dark("scrollbar")};
+        --font-family-emoji-flag-capable: #{config("typography", "font-family", "emoji")};
+        --font-family: #{config("typography", "font-family", "sans")};
+        --hover-brightness: #{config("effects", "hover-brightness")};
+        --justify-important: #{config("layout", "justify-important")};
+        --justify-normal: #{config("layout", "justify-normal")};
+        --line-height: #{config("layout", "line-height")};
+        --width-card: #{config("layout", "widths", "card")};
+        --width-card-medium: #{config("layout", "widths", "card-medium")};
+        --width-card-wide: #{config("layout", "widths", "card-wide")};
+        --width-content: #{config("layout", "widths", "content")};
+        --md-scrollbar-size: #{config("scrollbar", "size")};
+    }
+}
+
+@mixin markdown-root-props-md(
+    $selector: ":where(#{$selectors}):not([hidden])"
+) {
+    #{$selector} {
+        /* Base sizes */
+        --base-size-4: 0.25em;
+        --base-size-8: 0.5em;
+        --base-size-16: 1em;
+        --base-size-24: 1.5em;
+        --base-size-40: 2.5em;
+
+        /* Typography */
+        --base-text-weight-normal: 400;
+        --base-text-weight-medium: 500;
+        --base-text-weight-semibold: 600;
+        --fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+
+        /* Legacy GitHub-like colors */
+        --focus-outlineColor: light-dark(#0969da, #1f6feb);
+        --fgColor-default: light-dark(#1f2328, #f0f6fc);
+        --fgColor-muted: light-dark(#59636e, #9198a1);
+        --fgColor-accent: light-dark(#0969da, #4493f8);
+        --fgColor-success: light-dark(#1a7f37, #3fb950);
+        --fgColor-attention: light-dark(#9a6700, #d29922);
+        --fgColor-danger: light-dark(#d1242f, #f85149);
+        --fgColor-done: light-dark(#8250df, #ab7df8);
+        --bgColor-default: light-dark(#ffffff, #0d1117);
+        --bgColor-muted: light-dark(#f6f8fa, #151b23);
+        --bgColor-neutral-muted: light-dark(#818b981f, #656c7633);
+        --bgColor-attention-muted: light-dark(#fff8c5, #bb800926);
+        --borderColor-default: light-dark(#d1d9e0, #3d444d);
+        --borderColor-muted: light-dark(#d1d9e0b3, #3d444db3);
+        --borderColor-neutral-muted: light-dark(#d1d9e0b3, #3d444db3);
+        --borderColor-accent-emphasis: light-dark(#0969da, #1f6feb);
+        --borderColor-success-emphasis: light-dark(#1a7f37, #238636);
+        --borderColor-attention-emphasis: light-dark(#9a6700, #9e6a03);
+        --borderColor-danger-emphasis: light-dark(#cf222e, #da3633);
+        --borderColor-done-emphasis: light-dark(#8250df, #8957e5);
+
+        /* Prettylights */
+        --color-prettylights-syntax-comment: light-dark(#59636e, #9198a1);
+        --color-prettylights-syntax-constant: light-dark(#0550ae, #79c0ff);
+        --color-prettylights-syntax-constant-other-reference-link: light-dark(#0a3069, #a5d6ff);
+        --color-prettylights-syntax-entity: light-dark(#6639ba, #d2a8ff);
+        --color-prettylights-syntax-storage-modifier-import: light-dark(#1f2328, #f0f6fc);
+        --color-prettylights-syntax-entity-tag: light-dark(#0550ae, #7ee787);
+        --color-prettylights-syntax-keyword: light-dark(#cf222e, #ff7b72);
+        --color-prettylights-syntax-string: light-dark(#0a3069, #a5d6ff);
+        --color-prettylights-syntax-variable: light-dark(#953800, #ffa657);
+        --color-prettylights-syntax-brackethighlighter-unmatched: light-dark(#82071e, #f85149);
+        --color-prettylights-syntax-brackethighlighter-angle: light-dark(#59636e, #9198a1);
+        --color-prettylights-syntax-invalid-illegal-text: light-dark(#f6f8fa, #f0f6fc);
+        --color-prettylights-syntax-invalid-illegal-bg: light-dark(#82071e, #8e1519);
+        --color-prettylights-syntax-carriage-return-text: light-dark(#f6f8fa, #f0f6fc);
+        --color-prettylights-syntax-carriage-return-bg: light-dark(#cf222e, #b62324);
+        --color-prettylights-syntax-string-regexp: light-dark(#116329, #7ee787);
+        --color-prettylights-syntax-markup-list: light-dark(#3b2300, #f2cc60);
+        --color-prettylights-syntax-markup-heading: light-dark(#0550ae, #1f6feb);
+        --color-prettylights-syntax-markup-italic: light-dark(#1f2328, #f0f6fc);
+        --color-prettylights-syntax-markup-bold: light-dark(#1f2328, #f0f6fc);
+        --color-prettylights-syntax-markup-deleted-text: light-dark(#82071e, #ffdcd7);
+        --color-prettylights-syntax-markup-deleted-bg: light-dark(#ffebe9, #67060c);
+        --color-prettylights-syntax-markup-inserted-text: light-dark(#116329, #aff5b4);
+        --color-prettylights-syntax-markup-inserted-bg: light-dark(#dafbe1, #033a16);
+        --color-prettylights-syntax-markup-changed-text: light-dark(#953800, #ffdfb6);
+        --color-prettylights-syntax-markup-changed-bg: light-dark(#ffd8b5, #5a1e02);
+        --color-prettylights-syntax-markup-ignored-text: light-dark(#d1d9e0, #f0f6fc);
+        --color-prettylights-syntax-markup-ignored-bg: light-dark(#0550ae, #1158c7);
+        --color-prettylights-syntax-meta-diff-range: light-dark(#8250df, #d2a8ff);
+        --color-prettylights-syntax-sublimelinter-gutter-mark: light-dark(#818b98, #3d444d);
+
+        /* Markdown tokens */
+        --active-brightness: #{config.md-config("effects", "active-brightness")};
+        --border-radius: #{config.md-config("shape", "border-radius")};
+        --box-shadow: #{config.md-config("shape", "box-shadow")};
+        --color-accent: #{config.md-light-dark("accent")};
+        --color-bg: #{config.md-light-dark("bg")};
+        --color-bg-secondary: #{config.md-light-dark("bg-secondary")};
+        --color-link: #{config.md-light-dark("link")};
+        --color-secondary: #{config.md-light-dark("secondary")};
+        --color-secondary-accent: #{config.md-light-dark("secondary-accent")};
+        --color-shadow: #{config.md-light-dark("shadow")};
+        --color-table: #{config.md-light-dark("table")};
+        --color-text: #{config.md-light-dark("text")};
+        --color-text-secondary: #{config.md-light-dark("text-secondary")};
+        --color-scrollbar: #{config.md-light-dark("scrollbar")};
+        --font-family-emoji-flag-capable: #{config.md-config("font", "emoji")};
+        --font-family: #{config.md-config("font", "body")};
+        --hover-brightness: #{config.md-config("effects", "hover-brightness")};
+        --justify-important: #{config.md-config("layout", "justify-important")};
+        --justify-normal: #{config.md-config("layout", "justify-normal")};
+        --line-height: #{config.md-config("layout", "line-height")};
+        --width-card: #{config.md-config("layout", "widths", "card")};
+        --width-card-medium: #{config.md-config("layout", "widths", "card-medium")};
+        --width-card-wide: #{config.md-config("layout", "widths", "card-wide")};
+        --width-content: #{config.md-config("layout", "widths", "content")};
+        --md-scrollbar-size: #{config.md-config("scrollbar", "size")};
+    }
+}
+
+/*
+ * WHY: Pinned themes use *concrete* mod indices — not `light-dark()`.
+ * `light-dark()` + mixed color-scheme (OS vs app, shadow hosts, typed @property) caused
+ * Light QS tile with dark surfaces / cream panels with light-on-light labels.
+ * Index scale: 0 white ← 550 seed → 1000 black. Seeds stay writable by WallpaperTheme.
+ */
+@mixin -theme-seed-bridge {
+    --base-color: var(--color-primary);
+    --base-color-neutralized: color-mix(in oklab, var(--base-color) 60%, gray);
+    /* WHY: CSS fallback only — WallpaperTheme inline hex wins for photo paper/ink. */
+    --wallpaper-underlying-color: --u2-color-mod(var(--base-color-neutralized), 940);
+    --wallpaper-contrast-color: --u2-color-mod(var(--base-color-neutralized), 70);
+    --wf-md-primary: var(--color-primary);
+    --wf-md-seed: var(--base-color);
+}
+
+@mixin -theme-aliases {
+    --color-bg: var(--color-background);
+    --color-text: var(--color-on-background);
+    --color-fg: var(--color-on-surface);
+    --on-surface-color: var(--color-on-surface);
+    --surface-color: var(--color-surface);
+    --fl-surface: var(--color-surface);
+    --fl-on-surface: var(--color-on-surface);
+    --fl-primary: var(--color-primary);
+    --fl-on-primary: var(--color-on-primary);
+    --fl-secondary: var(--color-secondary);
+    --fl-on-secondary: var(--color-on-secondary);
+    --fl-shadow-xl: var(--shadow-xl);
+    --on-surface-variant: var(--color-on-surface-variant);
+    --wf-md-surface: var(--color-surface);
+    --wf-md-on-surface: var(--color-on-surface);
+    --wf-md-on-surface-variant: var(--color-on-surface-variant);
+    --wf-md-surf-container: var(--color-surface-container);
+    --wf-md-surf-container-low: var(--color-surface-container-low);
+    --wf-md-surf-container-high: var(--color-surface-container-high);
+    --wf-md-outline-variant: var(--color-outline-variant);
+    --md3-primary-container: var(--color-primary-container);
+    --md-primary-container: var(--color-primary-container);
+}
+
+/** Light surfaces — always light chrome; hue from --base-color / wallpaper. */
+@mixin -theme-light {
+    @include -theme-seed-bridge;
+    --color-on-primary: --u2-color-mod(var(--base-color), 40);
+    --color-secondary: --u2-color-mod(var(--base-color), 420);
+    --color-on-secondary: --u2-color-mod(var(--base-color), 40);
+    --color-tertiary: --u2-color-mod(var(--base-color), 400);
+    --color-on-tertiary: --u2-color-mod(var(--base-color), 40);
+    --color-error: #ef4444;
+    --color-on-error: --u2-color-mod(var(--color-error), 40);
+    --color-success: #4caf50;
+    --color-warning: #ff9800;
+    --color-info: #2196f3;
+    --color-background: --u2-color-mod(var(--base-color), 60);
+    --color-on-background: --u2-color-mod(var(--base-color), 900);
+    --color-surface: --u2-color-mod(var(--base-color), 60);
+    --color-on-surface: --u2-color-mod(var(--base-color), 900);
+    --color-surface-variant: --u2-color-mod(var(--base-color), 160);
+    --color-on-surface-variant: --u2-color-mod(var(--base-color), 700);
+    --color-outline: --u2-color-mod(var(--base-color), 300);
+    --color-outline-variant: --u2-color-mod(var(--base-color), 400);
+    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 40);
+    --color-surface-container-low: --u2-color-mod(var(--base-color), 30);
+    --color-surface-container: --u2-color-mod(var(--base-color), 20);
+    --color-surface-container-high: --u2-color-mod(var(--base-color), 5);
+    --color-surface-container-highest: --u2-color-mod(var(--base-color), 2);
+    /* WHY: Start/AppMenu plates used a dark 880 fallback when this token was missing. */
+    --color-primary-container: --u2-color-mod(var(--base-color), 160);
+    --color-on-primary-container: --u2-color-mod(var(--base-color), 900);
+    --color-border: color-mix(in oklab, var(--color-outline-variant) 75%, transparent);
+    @include -theme-aliases;
+}
+
+/** Dark surfaces — always dark chrome; hue from --base-color / wallpaper. */
+@mixin -theme-dark {
+    @include -theme-seed-bridge;
+    --color-on-primary: --u2-color-mod(var(--base-color), 920);
+    --color-secondary: --u2-color-mod(var(--base-color), 680);
+    --color-on-secondary: --u2-color-mod(var(--base-color), 920);
+    --color-tertiary: --u2-color-mod(var(--base-color), 700);
+    --color-on-tertiary: --u2-color-mod(var(--base-color), 920);
+    --color-error: #f87171;
+    --color-on-error: --u2-color-mod(var(--color-error), 920);
+    --color-success: #66bb6a;
+    --color-warning: #ffa726;
+    --color-info: #42a5f5;
+    --color-background: --u2-color-mod(var(--base-color), 940);
+    --color-on-background: --u2-color-mod(var(--base-color), 100);
+    --color-surface: --u2-color-mod(var(--base-color), 940);
+    --color-on-surface: --u2-color-mod(var(--base-color), 100);
+    --color-surface-variant: --u2-color-mod(var(--base-color), 840);
+    --color-on-surface-variant: --u2-color-mod(var(--base-color), 280);
+    --color-outline: --u2-color-mod(var(--base-color), 720);
+    --color-outline-variant: --u2-color-mod(var(--base-color), 640);
+    --color-surface-container-lowest: --u2-color-mod(var(--base-color), 920);
+    --color-surface-container-low: --u2-color-mod(var(--base-color), 940);
+    --color-surface-container: --u2-color-mod(var(--base-color), 960);
+    --color-surface-container-high: --u2-color-mod(var(--base-color), 980);
+    --color-surface-container-highest: --u2-color-mod(var(--base-color), 1000);
+    --color-primary-container: --u2-color-mod(var(--base-color), 820);
+    --color-on-primary-container: --u2-color-mod(var(--base-color), 100);
+    --color-border: color-mix(in oklab, var(--color-outline-variant) 70%, transparent);
+    @include -theme-aliases;
+}
+
+@layer tokens {
+    :root,
+    :host,
+    :scope {
+        /* Box seed; WallpaperTheme may override --color-primary on :root. */
+        --color-primary: #5a9ec8;
+        color-scheme: light dark;
+        /* Default = light concrete; OS-dark media + data-theme pins override below. */
+        @include -theme-light;
+
+        --space-2xs: 0.125rem;
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 0.75rem;
+        --space-lg: 1rem;
+        --space-xl: 1.25rem;
+        --space-2xl: 1.5rem;
+
+        --padding-xs: var(--space-xs);
+        --padding-sm: var(--space-sm);
+        --padding-md: var(--space-md);
+        --padding-lg: var(--space-lg);
+        --padding-xl: var(--space-xl);
+        --padding-2xl: var(--space-2xl);
+        --padding-3xl: 2rem;
+        --padding-4xl: 2.5rem;
+        --padding-5xl: 3rem;
+        --padding-6xl: 4rem;
+        --padding-7xl: 5rem;
+        --padding-8xl: 6rem;
+        --padding-9xl: 8rem;
+
+        --gap-xs: var(--space-xs);
+        --gap-sm: var(--space-sm);
+        --gap-md: var(--space-md);
+        --gap-lg: var(--space-lg);
+        --gap-xl: var(--space-xl);
+        --gap-2xl: var(--space-2xl);
+        --fl-ui-gap: var(--space-md);
+
+        /*
+         * Shape scale — M3 Expressive / Android 16–17 (dp≈rem at 16px).
+         * extra-small 4, small 8, medium 12, large 16, extra-large 28, full pill.
+         * `--radius-sm` stays 4dp so dense chrome does not jump.
+         */
+        --radius-none: 0;
+        --radius-xs: 0.25rem;
+        --radius-sm: 0.25rem;
+        --radius-default: 0.25rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-2xl: 1.75rem;
+        --radius-3xl: 2rem;
+        --radius-full: 9999px;
+        --fl-ui-radius: var(--radius-md);
+        --border-radius: var(--radius-md);
+        --shape-extra-small: var(--radius-xs);
+        --shape-small: var(--radius-md);
+        --shape-medium: var(--radius-lg);
+        --shape-large: var(--radius-xl);
+        --shape-extra-large: var(--radius-2xl);
+        --shape-full: var(--radius-full);
+
+        --elev-0: none;
+        --elev-1: 0 1px 1px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
+        --elev-2: 0 2px 6px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
+        --elev-3: 0 6px 16px rgba(0, 0, 0, 0.14), 0 18px 48px rgba(0, 0, 0, 0.1);
+
+        --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+        --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.1);
+        --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        --shadow-inset-strong: inset 0 4px 8px rgba(0, 0, 0, 0.12);
+        --shadow-none: 0 0 #0000;
+
+        --text-xs: 0.8rem;
+        --text-sm: 0.9rem;
+        --text-base: 1rem;
+        --text-lg: 1.1rem;
+        --text-xl: 1.25rem;
+        --text-2xl: 1.6rem;
+        --text-3xl: 2rem;
+
+        /* COMPAT: SCSS $font-* aliases and older sheets resolve these names. */
+        --font-xs: var(--text-xs);
+        --font-sm: var(--text-sm);
+        --font-base: var(--text-base);
+        --font-md: var(--text-base);
+        --font-lg: var(--text-lg);
+        --font-xl: var(--text-xl);
+        --font-2xl: var(--text-2xl);
+
+        /*
+         * Component foundation tokens. Keep these namespaced at root scope;
+         * `ui-icon` maps them to its internal `--icon-*` variables only on
+         * the component host, so a window titlebar cannot resize its content.
+         */
+        --ui-icon-size: 1.25rem;
+        --ui-icon-padding: 0px;
+        --ui-icon-tile-padding: 0.45rem;
+        --ui-window-icon-size: 0.95rem;
+        --ui-explorer-icon-size: 1.5rem;
+        --ui-explorer-icon-track: 2rem;
+        --ui-explorer-action-icon-size: 1.15rem;
+        --ui-explorer-row-height: 3.25rem;
+        --icon-size-sm: var(--ui-icon-size);
+        --icon-size-md: var(--ui-icon-size);
+        --icon-size-lg: var(--ui-explorer-icon-size);
+
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.125rem;
+        --font-size-xl: 1.25rem;
+
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
+
+        --font-family: "Roboto", ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+        --font-family-base: var(--font-family);
+        --font-family-mono: "Roboto Mono", "SF Mono", Monaco, Inconsolata, "Fira Code", monospace;
+        --font-sans: var(--font-family);
+        --font-mono: var(--font-family-mono);
+
+        --leading-tight: 1.2;
+        --leading-normal: 1.5;
+        --leading-relaxed: 1.8;
+        --line-height: var(--leading-normal);
+
+        --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+        --ease-expressive: cubic-bezier(0.34, 1.25, 0.64, 1);
+        --duration-fast: 140ms;
+        --duration-normal: 220ms;
+        --duration-slow: 360ms;
+        --transition-fast: var(--duration-fast) var(--ease-emphasized);
+        --transition-normal: var(--duration-normal) var(--ease-emphasized);
+        --transition-slow: var(--duration-slow) var(--ease-emphasized);
+        --motion-fast: var(--transition-fast);
+        --motion-normal: var(--transition-normal);
+        --motion-slow: var(--transition-slow);
+        --ease-out: cubic-bezier(0, 0, 0.2, 1);
+        --ease-in: cubic-bezier(0.4, 0, 1, 1);
+        --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+        --focus-ring: 0 0 0 3px color-mix(in oklab, var(--color-primary) 35%, transparent);
+
+        --z-base: 0;
+        --z-dropdown: 100;
+        --z-sticky: 200;
+        --z-fixed: 300;
+        --z-modal-backdrop: 400;
+        --z-modal: 500;
+        --z-popover: 600;
+        --z-tooltip: 700;
+        --z-toast: 800;
+        --z-max: 9999;
+
+        --view-bg: var(--color-container);
+        --view-fg: var(--color-on-surface);
+        --view-border: var(--color-outline-variant);
+        --view-input-bg: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 40),
+            var(--color-surface-container-high)
+        );
+        --view-files-bg: var(--color-surface-container-low);
+        --view-file-bg: var(--color-surface-container-lowest, var(--color-surface-container-low));
+        --view-results-bg: var(--color-surface-container-low);
+        --view-result-bg: var(--color-surface-container-lowest, var(--color-surface-container-low));
+
+        --color-surface-elevated: var(--color-surface-container);
+        --color-surface-hover: var(--color-surface-container-low);
+        --color-surface-active: var(--color-surface-container-high);
+        --color-on-surface-muted: var(--color-on-surface-variant);
+
+        --color-background-alt: var(--color-surface-variant);
+
+        --color-primary-hover: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 620),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 480)
+        );
+        --color-primary-active: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 700),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 400)
+        );
+        --color-accent: var(--color-secondary);
+        --color-accent-hover: light-dark(
+            --u2-color-mod(var(--base-color, var(--color-primary)), 500),
+            --u2-color-mod(var(--base-color, var(--color-primary)), 600)
+        );
+        --color-on-accent: var(--color-on-secondary);
+
+        --color-border-hover: var(--color-outline-variant);
+        --color-border-strong: var(--color-outline);
+        --color-border-focus: var(--color-primary);
+
+        --color-text: var(--color-on-surface);
+        --color-text-secondary: var(--color-on-surface-variant);
+        --color-text-muted: color-mix(in oklab, var(--color-on-surface) 50%, var(--color-surface));
+        --color-text-disabled: color-mix(in oklab, var(--color-on-surface) 38%, var(--color-surface));
+        --color-text-inverse: var(--color-on-primary);
+
+        --color-link: var(--color-primary);
+        --color-link-hover: var(--color-primary-hover);
+
+        --color-success-light: --u2-color-mod(var(--color-success), 280);
+        --color-success-dark: --u2-color-mod(var(--color-success), 720);
+        --color-warning-light: --u2-color-mod(var(--color-warning), 280);
+        --color-warning-dark: --u2-color-mod(var(--color-warning), 720);
+        --color-error-light: --u2-color-mod(var(--color-error), 280);
+        --color-error-dark: --u2-color-mod(var(--color-error), 720);
+        --color-info-light: --u2-color-mod(var(--color-info), 280);
+        --color-info-dark: --u2-color-mod(var(--color-info), 720);
+
+        --color-bg: var(--color-surface, var(--color-surface));
+        --color-bg-alt: var(--color-surface-variant, var(--color-surface-variant));
+        --color-fg: var(--color-on-surface, var(--color-on-surface));
+        --color-fg-muted: var(--color-on-surface-variant, var(--color-on-surface-variant));
+
+        --touch-min: 3rem;
+        --btn-height-sm: 2rem;
+        --btn-height-md: var(--touch-min);
+        --btn-height-lg: 3.5rem;
+        --btn-padding-x-sm: var(--space-md);
+        --btn-padding-x-md: var(--space-lg);
+        --btn-padding-x-lg: 1.5rem;
+        --btn-radius: var(--radius-md);
+        --btn-font-weight: var(--font-weight-medium);
+
+        --input-height-sm: 2rem;
+        --input-height-md: var(--touch-min);
+        --input-height-lg: 3.5rem;
+        --state-opacity-hover: 0.08;
+        --state-opacity-press: 0.12;
+        --state-opacity-focus: 0.12;
+        --state-opacity-disabled: 0.38;
+        --state-opacity-drag: 0.16;
+        --input-padding-x: var(--space-md);
+        --input-radius: var(--radius-md);
+        --input-border-color: var(--color-border, var(--color-border));
+        --input-focus-ring-color: var(--color-primary);
+        --input-focus-ring-width: 2px;
+
+        --card-padding: var(--space-lg);
+        --card-radius: var(--radius-lg);
+        --card-shadow: var(--shadow-sm);
+        --card-border-color: var(--color-border, var(--color-border));
+
+        --modal-backdrop-bg: light-dark(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.7));
+        --modal-bg: var(--color-surface, var(--color-surface));
+        --modal-radius: var(--radius-xl);
+        --modal-shadow: var(--shadow-xl);
+        --modal-padding: 1.5rem;
+
+        --toast-font-family: var(--font-family, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+        --toast-font-size: var(--font-size-base, 1rem);
+        --toast-font-weight: var(--font-weight-medium, 500);
+        --toast-letter-spacing: 0.01em;
+        --toast-line-height: 1.4;
+        --toast-white-space: nowrap;
+        --toast-pointer-events: auto;
+        --toast-user-select: none;
+        --toast-cursor: default;
+        --toast-opacity: 0;
+        --toast-transform: translateY(100%) scale(0.9);
+        --toast-transition: opacity 160ms ease-out, transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 100ms ease;
+        --toast-text: var(--color-on-surface, var(--color-on-surface, light-dark(#ffffff, #000000)));
+        --toast-bg: color-mix(in oklab, var(--color-surface-elevated, var(--color-surface-container-high, var(--color-surface, light-dark(#fafbfc, #1e293b)))) 90%, var(--color-on-surface, var(--color-on-surface, light-dark(#000000, #ffffff))));
+        --toast-radius: var(--radius-lg);
+        --toast-shadow: var(--shadow-lg);
+        --toast-padding: var(--space-lg);
+
+        --sidebar-width: 280px;
+        --sidebar-collapsed-width: 64px;
+        --nav-height: 56px;
+        --nav-height-compact: 48px;
+
+        --status-height: 24px;
+        --status-bg: var(--color-surface-elevated, var(--color-surface-container-high));
+        --status-font-size: var(--text-xs);
+
+        /* ── Shell chrome tokens (cross-shell registry) ─────────────────────────
+         * WHY: previously scattered across minimal/immersive/faint shells with
+         * duplicated `light-dark(var(--color-*), var(--color-*))` and offline hex
+         * fallbacks. Defined once here in terms of canonical `--color-*` so canonical
+         * is the single value source. Shells keep only theme/state overrides and
+         * documented offline/SSR hex fallbacks for when veela is not loaded.
+         */
+        --shell-bg: var(--sv-surface-2, var(--color-surface));
+        --shell-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-nav-bg: var(--sv-surface-2, var(--color-surface-container-high));
+        --shell-nav-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-nav-border: var(--sv-outline-variant, var(--color-outline-variant));
+        --shell-btn-hover: var(--sv-surface-2, var(--color-surface-container));
+        --shell-btn-active-bg: color-mix(in oklab, var(--color-primary) 18%, var(--sv-surface-2, var(--color-surface)));
+        --shell-btn-active-fg: var(--sv-on-surface, var(--color-on-surface));
+        --shell-status-bg: var(--sv-surface-1, var(--color-surface-container-low));
+        --shell-status-fg: var(--sv-on-surface, var(--color-on-surface));
+
+        /* ── Faint shell tokens (subsystem boot shells) ───────────────────────
+         * Derived from canonical `--color-*`; previously duplicated as
+         * `light-dark(var(--color-*), var(--color-*))` in `subsystem/boot/shells.scss`.
+         */
+        --faint-nav-bg: var(--color-surface-container-high);
+        --faint-nav-border: var(--color-outline-variant);
+        --faint-sidebar-bg: var(--color-surface-container-high);
+
+        /* ── Environment-shell tokens (color subset) ──────────────────────────
+         * `--env-status-fg` follows window chrome. `--env-launcher-fg*` aliases
+         * `--wallpaper-contrast-color` / paper (WallpaperTheme + statusbar luma).
+         * Non-color `--env-*` (z-index, safe-area, insets) stay in environment-shell.
+         */
+        --env-status-fg: light-dark(#1c1c1e, #f5f5f7);
+        --env-status-fg-muted: color-mix(in oklab, var(--env-status-fg) 78%, transparent);
+        --env-launcher-fg: var(--wallpaper-contrast-color);
+        --env-launcher-fg-shadow: color-mix(in oklab, var(--wallpaper-underlying-color) 88%, transparent);
+        --env-launcher-fg-glow: color-mix(in oklab, var(--wallpaper-underlying-color) 48%, transparent);
+
+        /* ── fl.ui `--error-color` alias ────────────────────────────────────
+         * Canonical alias so fl.ui/components can consume `var(--error-color)`
+         * without a standalone fallback definition.
+         */
+        --error-color: var(--color-error, #f87171);
+
+        /* ── Settings-view semantic tokens (`--sv-*`) ──────────────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*` / `--base-color`.
+         * Source of truth for the default relationships lives here; settings-view keeps
+         * only theme-pinned overrides (`html[data-theme]`) and shadow-DOM self-sufficiency
+         * fallbacks at use sites (`var(--sv-*, light-dark(...))`).
+         */
+        --sv-bg: var(--sv-surface-2, var(--color-surface-container-low, light-dark(#eef1f6, #0f1318)));
+        --sv-fg: var(--sv-on-surface, var(--color-on-surface, light-dark(#12151a, #e8edf2)));
+        --sv-muted: var(--sv-on-surface-variant, var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc)));
+        --sv-outline: var(--sv-outline-variant, var(--color-outline-variant, light-dark(#c5cdd8, #3d4755)));
+        --sv-surface-1: var(--color-surface-container-low, light-dark(#ffffff, #171c24));
+        --sv-surface-2: var(--color-surface-container, light-dark(#f4f6fa, #1c232d));
+        --sv-primary: var(--base-color, var(--color-primary, #5a9ec8));
+        --sv-danger: var(--color-error, #d32f2f);
+
+        /* ── History-view semantic tokens (`--vh-*`) ──────────────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*`.
+         * Source of truth for the default relationships lives here; history-view keeps
+         * only the complex derived tokens (`--vh-item-border/preview-bg/elev`) and
+         * shadow-DOM self-sufficiency fallbacks at use sites.
+         */
+        --vh-bg: var(--color-surface, light-dark(#eef1f6, #0f1318));
+        --vh-fg: var(--color-on-surface, light-dark(#12151a, #e8edf2));
+        --vh-muted: var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc));
+        --vh-primary: var(--color-primary, #007acc);
+        --vh-danger: var(--color-error, #d32f2f);
+        --vh-on-primary: var(--color-on-primary, #ffffff);
+        --vh-item-bg: var(--color-surface-container-low, light-dark(#e0e5ee, #0a0d12));
+
+        /* ── Explorer / shared view color tokens (`--view-*`) ────────────
+         * View-specific semantic layer DERIVED from canonical `--color-*`.
+         * Source of truth for the default relationships lives here; explorer-view keeps
+         * only `--explorer-*` non-color (radius/pad/font) and shadow-DOM self-sufficiency
+         * fallbacks at use sites. Shared `--view-*` namespace also consumed by markdown-view.
+         */
+        --view-border: color-mix(in oklab, var(--color-outline-variant, #888) 45%, transparent);
+        --view-fg-muted: color-mix(in oklab, var(--color-on-surface, #ccc) 72%, transparent);
+        --view-hover-bg: color-mix(in oklab, var(--color-primary, #3794ff) 12%, transparent);
+        --view-selected-bg: color-mix(in oklab, var(--color-primary, #3794ff) 18%, transparent);
+        --view-selected-border: var(--color-primary, #3794ff);
+    }
+
+    /* Auto (no pin): follow OS preference with concrete tokens — not light-dark(). */
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]):not([data-theme="dark"]),
+        :host:not([data-theme="light"]):not([data-theme="dark"]) {
+            color-scheme: dark;
+            @include -theme-dark;
+        }
+    }
+
+    /*
+     * Pinned app theme — highest authority. Concrete surfaces so shadow/UI never mix
+     * OS color-scheme with app light (Settings cream + white labels).
+     */
+    :root[data-theme="light"],
+    :host[data-theme="light"],
+    [data-theme="light"] {
+        color-scheme: light only;
+        @include -theme-light;
+    }
+
+    :root[data-theme="dark"],
+    :host[data-theme="dark"],
+    [data-theme="dark"] {
+        color-scheme: dark only;
+        @include -theme-dark;
+    }
+
+    :root[data-scheme="auto"]:not([data-theme="light"]):not([data-theme="dark"]),
+    :root[data-scheme="system"]:not([data-theme="light"]):not([data-theme="dark"]) {
+        color-scheme: light dark;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :root {
+            --transition-fast: 0ms;
+            --transition-normal: 0ms;
+            --transition-slow: 0ms;
+            --motion-fast: 0ms;
+            --motion-normal: 0ms;
+            --motion-slow: 0ms;
+            --duration-fast: 0ms;
+            --duration-normal: 0ms;
+            --duration-slow: 0ms;
+        }
+    }
+
+    @media (prefers-contrast: high) {
+        :root {
+            --color-border: var(--color-border, var(--color-outline));
+            --color-border-hover: color-mix(in oklab, var(--color-border, var(--color-outline)) 80%, var(--color-on-surface, var(--color-on-surface)));
+            --color-text-secondary: var(--color-on-surface, var(--color-on-surface));
+            --color-text-muted: var(--color-on-surface-variant, var(--color-on-surface-variant));
+        }
+    }
+
+    @media print {
+        :root {
+            --view-padding: 0;
+            --view-content-max-width: 100%;
+            --view-bg: white;
+            --view-fg: black;
+            --view-heading-color: black;
+            --view-link-color: black;
+        }
+
+        :root:has([data-view="viewer"]) {
+            --view-code-bg: #f5f5f5;
+            --view-code-fg: black;
+            --view-blockquote-bg: #f5f5f5;
+        }
+    }
+}

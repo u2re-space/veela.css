@@ -1,0 +1,2 @@
+// Chrome barrel. Do not name this `ui.scss` — that loops with `@use "ui"` / `styles/ui`.
+@forward "./ui/index";

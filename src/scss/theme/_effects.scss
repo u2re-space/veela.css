@@ -1,0 +1,60 @@
+/*
+ * Filename: _effects.scss
+ * FullPath: modules/projects/veela.css/src/scss/theme/_effects.scss
+ * Reason for changes: Canonical opt-in motion primitives replace the legacy advanced tree.
+ */
+
+@layer theme {
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes scale-in {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes validation-pulse {
+        50% {
+            transform: scale(1.01);
+        }
+    }
+
+    @keyframes daylight {
+        0%,
+        100% {
+            --light-az: 210deg;
+            --light-alt: 30deg;
+        }
+
+        50% {
+            --light-az: 270deg;
+            --light-alt: 70deg;
+        }
+    }
+}

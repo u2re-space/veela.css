@@ -43,7 +43,7 @@ let _loadedVariant: VeelaVariant | null = null;
 // ============================================================================
 
 import { loadBasicStyles } from "./basic/index";
-import { loadAdvancedStyles } from "./advanced/index";
+import { loadAdvancedStyles } from "./theme/loader";
 
 // ============================================================================
 // UNIFIED LOADER

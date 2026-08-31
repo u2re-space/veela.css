@@ -1,0 +1,17 @@
+/*
+ * Filename: native-controls.scss
+ * FullPath: modules/projects/veela.css/src/scss/ui/native-controls.scss
+ * Reason for changes: Curated opt-in native control chrome entry-point.
+ */
+
+@use "../layers";
+@use "./forms-bare-host-elements" as bare;
+@use "./native-host-button-chrome" as host;
+
+@layer components {
+    :where(button) {
+        @include host.essentials-native-host-button-chrome-base;
+    }
+}
+
+@include bare.emit-bare-form-element-layer();

@@ -1,5 +1,10 @@
-// Core is canonical for layout helpers that also exist in `basic` (FL fallbacks).
-// Hide basic's duplicates so the forwarded surface stays a single definition.
+/*
+ * FIND:veela-scss
+ * TAG:veela
+ * WHY: One style library. Trees: core (tokens/mixins), basic (normalize),
+ * interact (via core/interact), ui (chrome; also fl.ui/styles/ui symlink).
+ * Do not @forward ./ui here — vl-basic must stay a small foundation bundle.
+ */
 @forward "./core";
 @forward "./basic" hide
     aspect-ratio,

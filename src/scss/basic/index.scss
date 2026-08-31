@@ -1,19 +1,17 @@
-@forward "./misc";
-/**
- * Veela CSS - Core Runtime
- *
- * Shared foundation styles for all veela variants.
- * This module provides:
- * - CSS layer definitions
- * - Normalize/reset styles
- * - Core layout utilities
- * - Base tokens and properties
- * - Essential state management
- *
- * Inherited by: basic, advanced, beercss
+/*
+ * Filename: index.scss
+ * FullPath: modules/projects/veela.css/src/scss/basic/index.scss
+ * Reason for changes: Flatten base styles and remove the legacy misc facade.
  */
 
-@use "layers" as *;
-@use "misc" as *;
-@use "design" as *;
+@forward "./motion";
+@forward "./queries";
+
+@use "../layers";
+@use "./normalize";
+@use "./core-layout";
+@use "./shared";
+@use "./states";
+@use "./utilities";
+@use "./design";
  

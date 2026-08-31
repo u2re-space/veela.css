@@ -2,7 +2,7 @@
  * Shared types and probes for manual (`npm run dev`) and headless (`?veela_ci=1` / Puppeteer).
  */
 
-import { loadVeelaVariant } from "modules/projects/veela.css/scss/runtime/index.js";
+import { loadVeelaVariant } from "../../src/scss/index";
 
 
 export interface TestCase {
@@ -250,6 +250,49 @@ export function runProbeCategories(opts: ProbeRunOptions): TestCase[] {
             detail:
                 `${bgVar ? `--color-bg=${bgVar.slice(0, 40)}` : "no token"}; body-bg=${bodyBg}`,
         });
+
+        const canonicalTokens = [
+            "--color-primary",
+            "--space-md",
+            "--radius-md",
+            "--text-base",
+            "--transition-fast",
+        ];
+        const missingTokens = canonicalTokens.filter((name) => !root.getPropertyValue(name).trim());
+        cases.push({
+            name: "Tokens: canonical color, space, shape, type, and motion values exist",
+            pass: missingTokens.length === 0,
+            detail: missingTokens.length ? `missing=${missingTokens.join(", ")}` : "all resolved",
+        });
+
+        const previousTheme = html.getAttribute("data-theme");
+        try {
+            html.setAttribute("data-theme", "light");
+            const lightScheme = getComputedStyle(html).colorScheme;
+            html.setAttribute("data-theme", "dark");
+            const darkScheme = getComputedStyle(html).colorScheme;
+            cases.push({
+                name: "Theme: data-theme pins light and dark color-schemes",
+                pass:
+                    /\blight\b/.test(lightScheme) &&
+                    !/\bdark\b/.test(lightScheme) &&
+                    /\bdark\b/.test(darkScheme) &&
+                    !/\blight\b/.test(darkScheme),
+                detail: `light=${lightScheme}; dark=${darkScheme}`,
+            });
+        } finally {
+            if (previousTheme === null) html.removeAttribute("data-theme");
+            else html.setAttribute("data-theme", previousTheme);
+        }
+
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            const motion = getComputedStyle(html).getPropertyValue("--transition-fast").trim();
+            cases.push({
+                name: "Motion: reduced-motion removes transition duration",
+                pass: /^(?:0ms|0s)(?:\s|$)/.test(motion),
+                detail: motion,
+            });
+        }
     }
 
     if (want.has("stylesheet")) {

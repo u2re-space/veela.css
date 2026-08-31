@@ -1,7 +1,7 @@
 {
     "name": "@fest-lib/veela",
     "description": "fest-lib Veela: CSS tokens, --c2 color functions, Agate.UX, SCSS + runtime loaders",
-    "version": "0.1.20",
+    "version": "1.0.0",
     "license": "MIT",
     "type": "module",
     "sideEffects": true,
@@ -38,7 +38,13 @@
             "import": "./dist/veela.js",
             "default": "./dist/veela.js"
         },
-        "./scss/*": "./src/scss/*",
+        "./scss": "./src/scss/index.scss",
+        "./scss/core": "./src/scss/core/index.scss",
+        "./scss/basic": "./src/scss/basic/index.scss",
+        "./scss/interact": "./src/scss/interact/index.scss",
+        "./scss/ui": "./src/scss/ui/index.scss",
+        "./scss/theme": "./src/scss/theme/index.scss",
+        "./scss/native-controls": "./src/scss/ui/native-controls.scss",
         "./package.json": "./package.json",
         "./dist/index.js": "./dist/veela.js",
         "./index.js": "./dist/veela.js"
@@ -57,6 +63,7 @@
     },
     "scripts": {
         "test": "npm run test:puppeteer",
+        "test:scss-contracts": "node test/scss-contracts.mjs",
         "test:puppeteer": "node test/puppeteer/run.mjs",
         "test:browser": "npm run demo",
         "dev": "vite --host 0.0.0.0",
