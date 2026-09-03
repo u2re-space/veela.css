@@ -638,7 +638,7 @@
                 scale: 1;
             }
 
-            &:active {
+            &:active:not(.sd-widget-host):not([data-widget]):not([data-spanned]) {
                 scale: 0.94;
             }
 
@@ -656,8 +656,12 @@
             &[data-widget]:not([data-layer="labels"]),
             &[data-spanned]:not([data-layer="labels"]) {
                 /* WHY: launcher grid uses place-items:center + 4rem --tile-size; widgets must fill the span. */
-                grid-column: var(--cell-column, auto) / span var(--cell-span-x, 1) !important;
-                grid-row: var(--cell-row, auto) / span var(--cell-span-y, 1) !important;
+                /* INVARIANT: same origin as icon tiles (`--cs-grid-*` from logical `--cell-x/y`).
+                 * JS `--cell-column` is a second visual space and desyncs on CRX remount / orient. */
+                grid-column: clamp(1, calc(1 + round(nearest, var(--cs-grid-c, 0), 1)), 16)
+                    / span var(--cell-span-x, 1) !important;
+                grid-row: clamp(1, calc(1 + round(nearest, var(--cs-grid-r, 0), 1)), 16)
+                    / span var(--cell-span-y, 1) !important;
                 place-self: stretch !important;
                 justify-self: stretch !important;
                 align-self: stretch !important;
@@ -667,6 +671,8 @@
                 max-inline-size: none !important;
                 max-block-size: none !important;
                 --tile-size: 100%;
+                /* WHY: gridbox locks origin at 50% — wide search scales/settles around the middle. */
+                transform-origin: var(--sd-grab-ox, 50%) var(--sd-grab-oy, 50%) !important;
             }
 
             &.ui-ws-item-icon {
