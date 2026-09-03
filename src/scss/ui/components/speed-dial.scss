@@ -141,6 +141,100 @@
         pointer-events: none;
     }
 
+    /* Calendar / Quick Settings / pin — collapsible left rail, mirrored from core-rail. */
+    .speed-dial-chrome-rail {
+        --sd-rail-ink: var(--wallpaper-contrast-color, var(--env-launcher-fg, CanvasText));
+        position: fixed;
+        inset-block: 12%;
+        inset-inline-start: 0;
+        z-index: 6;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: stretch;
+        pointer-events: none;
+        max-block-size: 76%;
+        padding: 0;
+        border: none;
+        outline: none;
+        color: var(--sd-rail-ink);
+    }
+
+    .speed-dial-chrome-rail__toggle {
+        pointer-events: auto;
+        align-self: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: 1.65rem;
+        block-size: 2.6rem;
+        margin: 0;
+        padding: 0;
+        border: 0 none transparent;
+        border-radius: 0 10px 10px 0;
+        background: transparent;
+        color: color-mix(in oklab, var(--sd-rail-ink) 78%, transparent);
+        --icon-color: color-mix(in oklab, var(--sd-rail-ink) 78%, transparent);
+        cursor: pointer;
+    }
+
+    .speed-dial-chrome-rail__toggle ui-icon {
+        --icon-size: 1.1rem;
+        --icon-color: color-mix(in oklab, var(--sd-rail-ink) 78%, transparent);
+        pointer-events: none;
+    }
+
+    .speed-dial-chrome-rail__panel {
+        pointer-events: auto;
+        display: none;
+        flex-direction: column;
+        gap: 0.45rem;
+        padding: 0.55rem 0.45rem;
+        min-inline-size: 3.4rem;
+        max-inline-size: 5.2rem;
+        overflow: auto;
+        border: 1px solid color-mix(in oklab, var(--sd-rail-ink) 16%, transparent);
+        border-inline-start: none;
+        border-radius: 0 14px 14px 0;
+        background: color-mix(in oklab, var(--wallpaper-underlying-color, Canvas) 82%, transparent);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: var(--sd-rail-ink);
+    }
+
+    .speed-dial-chrome-rail[data-open] .speed-dial-chrome-rail__panel {
+        display: flex;
+    }
+
+    .speed-dial-chrome-rail__item {
+        appearance: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        margin: 0;
+        padding: 0.35rem 0.2rem;
+        border: none;
+        border-radius: var(--radius-lg);
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        min-inline-size: 0;
+    }
+
+    .speed-dial-chrome-rail__item:hover,
+    .speed-dial-chrome-rail__item:focus-visible,
+    .speed-dial-chrome-rail__item[data-pressed] {
+        background: color-mix(in oklab, var(--sd-rail-ink) 10%, transparent);
+        outline: none;
+    }
+
+    .speed-dial-chrome-rail__item ui-icon {
+        --icon-size: 1.55rem;
+        --icon-color: var(--sd-rail-ink);
+        color: var(--sd-rail-ink);
+        pointer-events: none;
+    }
+
     .speed-dial-workspace-pager {
         position: absolute;
         inset-inline: 0;
@@ -381,6 +475,18 @@
         }
     }
 
+    .speed-dial-root[data-tiles-locked] {
+        .sd-widget-host:not([data-widget="android"]) {
+            cursor: default;
+        }
+
+        .sd-widget-chrome,
+        .sd-widget-resize {
+            display: none;
+            pointer-events: none;
+        }
+    }
+
     .sd-widget--android {
         pointer-events: none;
         opacity: 0.08;
@@ -424,7 +530,8 @@
         color: color-mix(in oklab, var(--sd-you-ink, var(--wallpaper-contrast-color)) 62%, transparent);
     }
 
-    .speed-dial-core-rail__label {
+    .speed-dial-core-rail__label,
+    .speed-dial-chrome-rail__label {
         font-size: 0.62rem;
         line-height: 1.15;
         text-align: center;
