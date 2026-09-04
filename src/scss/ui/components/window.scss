@@ -598,4 +598,94 @@
         opacity: 0.9;
     }
 }
+
+/*
+ * WHY: Inline `container-type: size` on `.content-handler` + print `height: auto` sizes
+ * the box as empty (size containment). Chrome then paginates blank pages.
+ * INVARIANT: Print kills size/paint containment and lets slotted markdown grow.
+ */
+@media print {
+    :host(ui-window) {
+        display: block !important;
+        position: static !important;
+        inset: auto !important;
+        transform: none !important;
+        overflow: visible !important;
+        contain: none !important;
+        container-type: normal !important;
+        isolation: auto !important;
+        inline-size: 100% !important;
+        max-inline-size: 100% !important;
+        block-size: auto !important;
+        min-block-size: 0 !important;
+        max-block-size: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .window-container {
+        display: block !important;
+        overflow: visible !important;
+        contain: none !important;
+        isolation: auto !important;
+        inline-size: 100% !important;
+        block-size: auto !important;
+        height: auto !important;
+        min-block-size: 0 !important;
+        max-block-size: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .title-handler,
+    .window-resizer,
+    .footer-handler {
+        display: none !important;
+    }
+
+    .content-handler,
+    :host(ui-window[managed]) .content-handler,
+    :host(ui-window[native-mode]) .content-handler,
+    :host(ui-window[data-native-active]) .content-handler {
+        display: block !important;
+        position: static !important;
+        transform: none !important;
+        contain: none !important;
+        container-type: normal !important;
+        overflow: visible !important;
+        isolation: auto !important;
+        flex: none !important;
+        inline-size: 100% !important;
+        block-size: auto !important;
+        min-block-size: 0 !important;
+        max-block-size: none !important;
+        height: auto !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .content-handler ::slotted(*),
+    :host(ui-window[managed]) .content-handler ::slotted(*),
+    :host(ui-window[native-mode]) .content-handler ::slotted(*),
+    :host(ui-window[data-native-active]) .content-handler ::slotted(*) {
+        display: block !important;
+        flex: none !important;
+        overflow: visible !important;
+        contain: none !important;
+        inline-size: 100% !important;
+        max-inline-size: 100% !important;
+        block-size: auto !important;
+        min-block-size: 0 !important;
+        max-block-size: none !important;
+        height: auto !important;
+    }
+}
 }
