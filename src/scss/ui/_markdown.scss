@@ -23,6 +23,7 @@
 @use "../core/config" as config;
 @use "../core/tokens" as tokens;
 @use "../core/mixins" as mixins;
+@use "./code-highlight";
 
 /* ─── Animations ──────────────────────────────────────────────────────────── */
 

@@ -1,0 +1,193 @@
+/*
+ * Overlay syntax paint + CSS Custom Highlight selection.
+ *
+ * FIND:code-highlight
+ * WHY: Syntax colors are a fixed light-dark() palette. Chrome tokens
+ * (`--color-primary`) and `color-mix` with `CanvasText` resolve to navy/black
+ * on the code background. `::highlight(code-selection)` mirrors host selection.
+ */
+@layer components {
+    .code-highlight-overlay {
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        padding-inline-start: var(--code-gutter, 0px);
+        box-sizing: border-box;
+        color-scheme: inherit;
+        color: light-dark(#1f2328, #e6edf3);
+        -webkit-text-fill-color: currentColor;
+        white-space: pre;
+        tab-size: 4;
+        z-index: 1;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .code-highlight-overlay,
+    .code-highlight-overlay__gutter,
+    .code-highlight-overlay__paint,
+    .code-highlight-overlay__paint * {
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        font-style: inherit;
+        font-stretch: inherit;
+        font-variant: inherit;
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "clig" 0, "calt" 0, "dlig" 0;
+        font-kerning: none;
+        font-variation-settings: inherit;
+        line-height: var(--code-line-height, inherit);
+        letter-spacing: inherit;
+        word-spacing: inherit;
+        tab-size: inherit;
+        text-rendering: inherit;
+        font-synthesis: none;
+        -webkit-text-fill-color: currentColor;
+    }
+
+    .code-highlight-overlay__gutter {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        inline-size: var(--code-gutter, 0px);
+        text-align: end;
+        padding-inline-end: 0.5rem;
+        box-sizing: border-box;
+        color: light-dark(#656d76, #8b949e);
+        white-space: pre;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .code-highlight-overlay__paint {
+        min-inline-size: 0;
+        margin: 0;
+        padding: 0;
+        white-space: pre;
+        overflow: visible;
+    }
+
+    pre:has(> .code-highlight-overlay),
+    .code-highlight-host:has(> .code-highlight-overlay) {
+        position: relative;
+    }
+
+    pre:has(> .code-highlight-overlay) > code,
+    .code-highlight-source:has(+ .code-highlight-overlay),
+    .code-highlight-host > .code-highlight-source {
+        display: block;
+        line-height: var(--code-line-height, normal);
+        padding-inline-start: var(--code-gutter, 0px);
+        font-variant-ligatures: none;
+        font-kerning: none;
+        font-feature-settings: "liga" 0, "clig" 0, "calt" 0, "dlig" 0;
+        caret-color: light-dark(#1f2328, #e6edf3);
+    }
+
+    /* INVARIANT: never hide source unless overlay paint has glyphs. */
+    pre:has(> .code-highlight-painted + .code-highlight-overlay) > code.code-highlight-painted,
+    .code-highlight-source.code-highlight-painted:has(+ .code-highlight-overlay),
+    .code-highlight-host > .code-highlight-source.code-highlight-painted {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+
+    pre:has(> .code-highlight-overlay) > code::selection,
+    .code-highlight-source::selection {
+        background-color: color-mix(in oklab, #79c0ff 32%, transparent);
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+
+    pre[data-language]:not([data-language=""]) {
+        position: relative;
+    }
+
+    pre[data-language]:not([data-language=""])::after {
+        content: attr(data-language);
+        position: absolute;
+        inset-block-start: 0.35rem;
+        inset-inline-end: 0.5rem;
+        z-index: 2;
+        padding: 0.1em 0.45em;
+        border-radius: var(--radius-xs, 4px);
+        font-family: var(--md-font-sans, var(--font-family, sans-serif));
+        font-size: 0.7em;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        text-transform: lowercase;
+        color: light-dark(#656d76, #8b949e);
+        background: color-mix(in oklab, var(--md-bg-code, var(--view-code-bg, Canvas)) 70%, transparent);
+        pointer-events: none;
+    }
+
+    .code-highlight-overlay {
+        .hljs-comment,
+        .hljs-quote {
+            color: light-dark(#656d76, #8b949e);
+        }
+
+        .hljs-keyword,
+        .hljs-selector-tag,
+        .hljs-literal,
+        .hljs-built_in {
+            color: light-dark(#0550ae, #79c0ff);
+        }
+
+        .hljs-string,
+        .hljs-addition,
+        .hljs-attr {
+            color: light-dark(#0a3069, #a5d6ff);
+        }
+
+        .hljs-number,
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-type {
+            color: light-dark(#116329, #3fb950);
+        }
+
+        .hljs-title,
+        .hljs-title.function_,
+        .hljs-section,
+        .hljs-name {
+            color: light-dark(#0550ae, #79c0ff);
+        }
+
+        .hljs-property,
+        .hljs-attribute,
+        .hljs-selector-class,
+        .hljs-selector-id {
+            color: light-dark(#116329, #7ee787);
+        }
+
+        .hljs-meta,
+        .hljs-doctag,
+        .hljs-punctuation,
+        .hljs-operator,
+        .hljs-tag {
+            color: light-dark(#656d76, #c9d1d9);
+        }
+
+        .hljs-deletion {
+            color: light-dark(#cf222e, #ffa198);
+        }
+
+        .hljs-emphasis,
+        .hljs-strong {
+            color: inherit;
+        }
+    }
+}
+
+@layer overrides {
+    ::highlight(code-selection) {
+        background-color: color-mix(in oklab, #79c0ff 32%, transparent);
+        color: inherit;
+    }
+}
