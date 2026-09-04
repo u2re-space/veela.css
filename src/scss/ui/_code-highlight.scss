@@ -14,7 +14,7 @@
         overflow: hidden;
         margin: 0;
         padding: 0;
-        padding-inline-start: var(--code-gutter, 0px);
+        /* WHY: gutter lives on the host; JS copies that padding. A second gutter here wraps earlier. */
         box-sizing: border-box;
         color-scheme: inherit;
         color: light-dark(#1f2328, #e6edf3);
@@ -40,7 +40,7 @@
         font-feature-settings: "liga" 0, "clig" 0, "calt" 0, "dlig" 0;
         font-kerning: none;
         font-variation-settings: inherit;
-        line-height: var(--code-line-height, inherit);
+        line-height: max(1.35em, var(--code-line-height, 1.45));
         letter-spacing: inherit;
         word-spacing: inherit;
         tab-size: inherit;
@@ -68,7 +68,9 @@
         min-inline-size: 0;
         margin: 0;
         padding: 0;
-        white-space: pre;
+        white-space: inherit;
+        word-break: inherit;
+        overflow-wrap: inherit;
         overflow: visible;
     }
 
@@ -81,7 +83,10 @@
     .code-highlight-source:has(+ .code-highlight-overlay),
     .code-highlight-host > .code-highlight-source {
         display: block;
-        line-height: var(--code-line-height, normal);
+        white-space: pre;
+        word-break: normal;
+        overflow-wrap: normal;
+        line-height: max(1.35em, var(--code-line-height, 1.45));
         padding-inline-start: var(--code-gutter, 0px);
         font-variant-ligatures: none;
         font-kerning: none;
@@ -97,8 +102,13 @@
         -webkit-text-fill-color: transparent;
     }
 
-    pre:has(> .code-highlight-overlay) > code::selection,
-    .code-highlight-source::selection {
+    .code-highlight-source.code-highlight-inplace {
+        color: light-dark(#1f2328, #e6edf3);
+        -webkit-text-fill-color: currentColor;
+    }
+
+    pre:has(> .code-highlight-overlay) > code:not(.code-highlight-inplace)::selection,
+    .code-highlight-source:not(.code-highlight-inplace)::selection {
         background-color: color-mix(in oklab, #79c0ff 32%, transparent);
         color: transparent;
         -webkit-text-fill-color: transparent;
@@ -126,7 +136,8 @@
         pointer-events: none;
     }
 
-    .code-highlight-overlay {
+    .code-highlight-overlay,
+    .code-highlight-inplace {
         .hljs-comment,
         .hljs-quote {
             color: light-dark(#656d76, #8b949e);
