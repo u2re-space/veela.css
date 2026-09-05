@@ -79,10 +79,19 @@
         position: relative;
     }
 
-    pre:has(> .code-highlight-overlay) > code,
-    .code-highlight-source:has(+ .code-highlight-overlay),
-    .code-highlight-host > .code-highlight-source {
-        display: block;
+    /* WHY: Capacitor inplace/source-only has no overlay sibling. Overlay-gated
+     * `display:block` never applied, so `code` stayed inline and normalize
+     * `--color-bg-alt` painted a chip per line box. */
+    pre > code,
+    pre > .code-highlight-source,
+    .code-highlight-source:not(textarea),
+    .code-highlight-inplace,
+    .code-highlight-source-only {
+        display: block !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none;
+        border-radius: 0;
         white-space: pre;
         word-break: normal;
         overflow-wrap: normal;
@@ -102,9 +111,31 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .code-highlight-source.code-highlight-inplace {
+    .code-highlight-source.code-highlight-placeholder + .code-highlight-overlay,
+    .code-highlight-host > .code-highlight-source.code-highlight-placeholder + .code-highlight-overlay {
+        opacity: 0.62;
+    }
+
+    /* WHY: `currentColor` fill on the host inherits as a computed color and
+     * flattens every hljs span to one ink. Only source-only (no spans) may
+     * pin fill; inplace tokens set fill on themselves. */
+    .code-highlight-source.code-highlight-source-only {
+        color: #e6edf3;
         color: light-dark(#1f2328, #e6edf3);
-        -webkit-text-fill-color: currentColor;
+    }
+
+    .code-highlight-source.code-highlight-inplace {
+        color: #e6edf3;
+        color: light-dark(#1f2328, #e6edf3);
+        -webkit-text-fill-color: unset;
+    }
+
+    /* WHY: hljs bold/italic changes advance width vs the plain source caret. */
+    .code-highlight-overlay__paint,
+    .code-highlight-overlay__paint * {
+        font-weight: 400;
+        font-style: normal;
+        font-synthesis: none;
     }
 
     pre:has(> .code-highlight-overlay) > code:not(.code-highlight-inplace)::selection,
@@ -138,8 +169,15 @@
 
     .code-highlight-overlay,
     .code-highlight-inplace {
+        [class^="hljs-"],
+        [class*=" hljs-"] {
+            /* WHY: Capacitor WebView paints fill, not `color`, on inherited text. */
+            -webkit-text-fill-color: currentColor;
+        }
+
         .hljs-comment,
         .hljs-quote {
+            color: #8b949e;
             color: light-dark(#656d76, #8b949e);
         }
 
@@ -147,12 +185,14 @@
         .hljs-selector-tag,
         .hljs-literal,
         .hljs-built_in {
+            color: #79c0ff;
             color: light-dark(#0550ae, #79c0ff);
         }
 
         .hljs-string,
         .hljs-addition,
         .hljs-attr {
+            color: #a5d6ff;
             color: light-dark(#0a3069, #a5d6ff);
         }
 
@@ -160,6 +200,7 @@
         .hljs-variable,
         .hljs-template-variable,
         .hljs-type {
+            color: #3fb950;
             color: light-dark(#116329, #3fb950);
         }
 
@@ -167,6 +208,7 @@
         .hljs-title.function_,
         .hljs-section,
         .hljs-name {
+            color: #79c0ff;
             color: light-dark(#0550ae, #79c0ff);
         }
 
@@ -174,6 +216,7 @@
         .hljs-attribute,
         .hljs-selector-class,
         .hljs-selector-id {
+            color: #7ee787;
             color: light-dark(#116329, #7ee787);
         }
 
@@ -182,10 +225,12 @@
         .hljs-punctuation,
         .hljs-operator,
         .hljs-tag {
+            color: #c9d1d9;
             color: light-dark(#656d76, #c9d1d9);
         }
 
         .hljs-deletion {
+            color: #ffa198;
             color: light-dark(#cf222e, #ffa198);
         }
 
@@ -200,5 +245,71 @@
     ::highlight(code-selection) {
         background-color: color-mix(in oklab, #79c0ff 32%, transparent);
         color: inherit;
+    }
+
+    /* WHY: Android RAW is source-only (no overlay / no innerHTML). Token ink
+     * is CSS Custom Highlight on the plain text node — caret stays synced. */
+    ::highlight(hljs-comment),
+    ::highlight(hljs-quote) {
+        color: #8b949e;
+    }
+
+    ::highlight(hljs-keyword),
+    ::highlight(hljs-selector-tag),
+    ::highlight(hljs-literal),
+    ::highlight(hljs-built_in),
+    ::highlight(hljs-title),
+    ::highlight(hljs-section),
+    ::highlight(hljs-name) {
+        color: #79c0ff;
+    }
+
+    ::highlight(hljs-string),
+    ::highlight(hljs-addition),
+    ::highlight(hljs-attr) {
+        color: #a5d6ff;
+    }
+
+    ::highlight(hljs-number),
+    ::highlight(hljs-variable),
+    ::highlight(hljs-template-variable),
+    ::highlight(hljs-type) {
+        color: #3fb950;
+    }
+
+    ::highlight(hljs-property),
+    ::highlight(hljs-attribute),
+    ::highlight(hljs-selector-class),
+    ::highlight(hljs-selector-id) {
+        color: #7ee787;
+    }
+
+    ::highlight(hljs-meta),
+    ::highlight(hljs-doctag),
+    ::highlight(hljs-punctuation),
+    ::highlight(hljs-operator),
+    ::highlight(hljs-tag) {
+        color: #c9d1d9;
+    }
+
+    ::highlight(hljs-deletion) {
+        color: #ffa198;
+    }
+
+    /* WHY: screen paint is a transparent source + overlay. Print drops the
+     * overlay and must show the source glyphs or fenced/RAW blocks are blank. */
+    @media print {
+        .code-highlight-overlay {
+            display: none !important;
+        }
+
+        pre:has(> .code-highlight-overlay) > code,
+        .code-highlight-source,
+        .code-highlight-source.code-highlight-painted,
+        .code-highlight-host > .code-highlight-source,
+        pre[data-raw-target] > code {
+            color: #111 !important;
+            -webkit-text-fill-color: #111 !important;
+        }
     }
 }

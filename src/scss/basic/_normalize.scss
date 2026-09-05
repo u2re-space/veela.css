@@ -292,11 +292,14 @@
             font-size: 0.875em;
         }
 
-        :where(code, samp, kbd) {
+        :where(:not(pre) > code, samp, kbd) {
             @include code-styling();
         }
 
-        :where(code) {
+        /* WHY: Never paint `pre > code` as inline chips. Capacitor highlight
+         * is inplace/source-only (no overlay), so the old `code` background
+         * showed a strip per line. */
+        :where(:not(pre) > code) {
             background: var(--color-bg-alt);
             padding: 0.125em 0.25em;
             border-radius: var(--radius-sm);
@@ -309,6 +312,7 @@
             overflow-x: auto;
 
             :where(code) {
+                display: block;
                 background: transparent;
                 padding: 0;
                 border-radius: 0;
