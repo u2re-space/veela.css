@@ -270,6 +270,32 @@
                 max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
             }
         }
+
+        /*
+         * INVARIANT: `--lv-height` stays the pre-IME wallpaper size. With IME open,
+         * chrome fills `--vv-height` so html/toolbars do not scroll with the caret.
+         */
+        :root[data-vk-open],
+        html[data-vk-open] {
+            overflow: hidden !important;
+            overscroll-behavior: none;
+            inset-block-start: var(--vv-offset-top, 0px);
+            inset-block-end: auto;
+            min-block-size: var(--vv-height, 100svb);
+            block-size: var(--vv-height, 100svb);
+            max-block-size: var(--vv-height, 100svb) !important;
+        }
+
+        html[data-vk-open] :where(body) {
+            overflow: hidden !important;
+            overscroll-behavior: none;
+            max-block-size: var(--vv-height, 100svb) !important;
+
+            & > :where(#app, #container, #root, .root),
+            & > :where(*) {
+                max-block-size: var(--vv-height, 100svb) !important;
+            }
+        }
     };
 
 };
