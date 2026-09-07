@@ -57,7 +57,10 @@
 
             //
             max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb))) !important;
+            /* WHY: `min(100%, …)` on `position: fixed` html is the visual viewport.
+             * Select All / IME then clips the whole shell to the keyboard leftover. */
+            max-block-size: var(--lv-height, 100lvb) !important;
+            overflow-anchor: none;
 
             //
             place-content: start;
@@ -116,7 +119,7 @@
 
                 //
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
             }
 
             //
@@ -126,7 +129,7 @@
                 min-inline-size: 0px;
                 min-block-size: 0px;
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
                 background-color: transparent;
                 border: none 0px transparent;
                 outline: none 0px transparent;
@@ -135,7 +138,7 @@
             //
             & > :where(*) {
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
             }
         }
         
@@ -195,7 +198,10 @@
 
             //
             max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb))) !important;
+            /* WHY: `min(100%, …)` on `position: fixed` html is the visual viewport.
+             * Select All / IME then clips the whole shell to the keyboard leftover. */
+            max-block-size: var(--lv-height, 100lvb) !important;
+            overflow-anchor: none;
 
             //
             place-content: start;
@@ -251,7 +257,7 @@
 
                 //
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
             }
 
             //
@@ -261,13 +267,13 @@
                 min-inline-size: 0px;
                 min-block-size: 0px;
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
             }
 
             //
             & > :where(*) {
                 max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: min(100%, min(100cqb, var(--lv-height, 100lvb)));
+                max-block-size: var(--lv-height, 100lvb);
             }
         }
 
