@@ -12,6 +12,9 @@
             //
             --keyboard-inset-bottom: calc(max(env(keyboard-inset-bottom, 0px), 0px) / max(var(--zoom, 1), 0.125));
             --keyboard-inset-height: calc(max(env(keyboard-inset-height, 0px), 0px) / max(var(--zoom, 1), 0.125));
+            /* INVARIANT: fill the large viewport; `min(screen, 100lv*)` undershoots Android availHeight. */
+            --screen-fit-inline: max(var(--screen-width, 0px), var(--lv-width, 0px), 100lvi);
+            --screen-fit-block: max(var(--screen-height, 0px), var(--lv-height, 0px), 100lvb);
         }
 
         //
@@ -48,18 +51,17 @@
             inset-block-end: auto;
 
             //
-            min-inline-size: min(100cqi, 100dvi);
-            min-block-size: min(100cqb, var(--lv-height, 100lvb));
+            min-inline-size: var(--screen-fit-inline, 100lvi);
+            min-block-size: var(--screen-fit-block, 100lvb);
 
             //
             inline-size: stretch;
-            block-size: var(--lv-height, 100lvb);
+            block-size: var(--screen-fit-block, 100lvb);
 
             //
-            max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            /* WHY: `min(100%, …)` on `position: fixed` html is the visual viewport.
-             * Select All / IME then clips the whole shell to the keyboard leftover. */
-            max-block-size: var(--lv-height, 100lvb) !important;
+            max-inline-size: var(--screen-fit-inline, 100lvi) !important;
+            /* WHY: never `min(100%, …)` on `position: fixed` html (visual viewport / IME). */
+            max-block-size: var(--screen-fit-block, 100lvb) !important;
             overflow-anchor: none;
 
             //
@@ -118,8 +120,8 @@
                 block-size: stretch;
 
                 //
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
             }
 
             //
@@ -128,8 +130,8 @@
                 block-size: stretch;
                 min-inline-size: 0px;
                 min-block-size: 0px;
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
                 background-color: transparent;
                 border: none 0px transparent;
                 outline: none 0px transparent;
@@ -137,8 +139,8 @@
 
             //
             & > :where(*) {
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
             }
         }
         
@@ -153,6 +155,9 @@
             //
             --keyboard-inset-bottom: calc(max(env(keyboard-inset-bottom, 0px), 0px) / max(var(--zoom, 1), 0.125));
             --keyboard-inset-height: calc(max(env(keyboard-inset-height, 0px), 0px) / max(var(--zoom, 1), 0.125));
+            /* INVARIANT: fill the large viewport; `min(screen, 100lv*)` undershoots Android availHeight. */
+            --screen-fit-inline: max(var(--screen-width, 0px), var(--lv-width, 0px), 100lvi);
+            --screen-fit-block: max(var(--screen-height, 0px), var(--lv-height, 0px), 100lvb);
         }
 
         //
@@ -189,18 +194,17 @@
             inset-block-end: auto;
 
             //
-            min-inline-size: min(100cqi, 100dvi);
-            min-block-size: min(100cqb, var(--lv-height, 100lvb));
+            min-inline-size: var(--screen-fit-inline, 100lvi);
+            min-block-size: var(--screen-fit-block, 100lvb);
 
             //
             inline-size: stretch;
-            block-size: var(--lv-height, 100lvb);
+            block-size: var(--screen-fit-block, 100lvb);
 
             //
-            max-inline-size: min(100%, min(100cqi, 100dvi)) !important;
-            /* WHY: `min(100%, …)` on `position: fixed` html is the visual viewport.
-             * Select All / IME then clips the whole shell to the keyboard leftover. */
-            max-block-size: var(--lv-height, 100lvb) !important;
+            max-inline-size: var(--screen-fit-inline, 100lvi) !important;
+            /* WHY: never `min(100%, …)` on `position: fixed` html (visual viewport / IME). */
+            max-block-size: var(--screen-fit-block, 100lvb) !important;
             overflow-anchor: none;
 
             //
@@ -256,8 +260,8 @@
                 block-size: stretch;
 
                 //
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
             }
 
             //
@@ -266,14 +270,14 @@
                 block-size: stretch;
                 min-inline-size: 0px;
                 min-block-size: 0px;
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
             }
 
             //
             & > :where(*) {
-                max-inline-size: min(100%, min(100cqi, 100dvi));
-                max-block-size: var(--lv-height, 100lvb);
+                max-inline-size: var(--screen-fit-inline, 100lvi);
+                max-block-size: var(--screen-fit-block, 100lvb);
             }
         }
 
