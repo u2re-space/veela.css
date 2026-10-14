@@ -211,6 +211,33 @@
     display: none !important;
 }
 
+/* WHY: a squeezed desktop pane (Cursor debug) is under 640px but still has a mouse.
+ * Phone chrome stays hidden; fine pointers keep close / minimize on screen. */
+@media (pointer: fine) {
+    :host(ui-window[data-mobile-max]) {
+        --ui-win-titlebar-height: 2.5rem;
+    }
+
+    :host(ui-window[data-mobile-max]) .title-minimize,
+    :host(ui-window[data-mobile-max]) .title-maximize,
+    :host(ui-window[data-mobile-max]) .title-close,
+    :host(ui-window[data-mobile-max]) .title-exit-native {
+        display: inline-flex !important;
+    }
+
+    :host(ui-window[data-mobile-max]) .title-handler {
+        pointer-events: auto;
+        cursor: default;
+    }
+
+    :host(ui-window[data-mobile-max]) .title-handler-main,
+    :host(ui-window[data-mobile-max]) .title-handler-actions,
+    :host(ui-window[data-mobile-max]) .title-handler-buttons {
+        display: flex !important;
+        pointer-events: auto;
+    }
+}
+
 /* Standalone PWA mobile: no titlebar — content is edge-to-edge (safe-area via views if needed). */
 :host(ui-window[data-no-titlebar]) {
     --ui-win-titlebar-height: 0px;
@@ -238,6 +265,25 @@
 :host(ui-window[data-status-gap]:not([data-no-titlebar])) .title-handler-actions,
 :host(ui-window[data-status-gap]:not([data-no-titlebar])) .title-handler-buttons {
     display: none !important;
+}
+
+/* WHY: status-gap hides chrome under the overlay band. A fine pointer in a
+ * narrow pane still needs Close — the band is not a phone gesture surface. */
+@media (pointer: fine) {
+    :host(ui-window[data-mobile-max][data-status-gap]:not([data-no-titlebar])) {
+        --ui-win-titlebar-height: 2.5rem;
+    }
+
+    :host(ui-window[data-mobile-max][data-status-gap]:not([data-no-titlebar])) .title-handler {
+        pointer-events: auto;
+    }
+
+    :host(ui-window[data-mobile-max][data-status-gap]:not([data-no-titlebar])) .title-handler-main,
+    :host(ui-window[data-mobile-max][data-status-gap]:not([data-no-titlebar])) .title-handler-actions,
+    :host(ui-window[data-mobile-max][data-status-gap]:not([data-no-titlebar])) .title-handler-buttons {
+        display: flex !important;
+        pointer-events: auto;
+    }
 }
 
 :host(ui-window[data-desk-max]) {
