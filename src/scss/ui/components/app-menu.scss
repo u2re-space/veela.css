@@ -7,19 +7,28 @@
         z-index: calc(var(--env-z-shell-chrome, 2147483000) + 4);
     }
 
-    .env-shell-app-menu[data-page] .env-shell-app-menu__panel {
+    .env-shell-app-menu[data-page] .env-shell-app-menu__frame {
         inline-size: 100%;
         block-size: 100%;
         max-inline-size: stretch;
-        max-block-size: stretch;
+        max-block-size: none;
+        min-block-size: 0;
         border-radius: 0;
+        overflow: visible;
+        z-index: 3;
+    }
+
+    .env-shell-app-menu[data-page] .env-shell-app-menu__panel {
+        block-size: 100%;
+        max-block-size: 100%;
+        min-block-size: 0;
         /* WHY: 1fr clamps the grid; panel overflow never fires — scroll on the grid. */
         overflow: hidden;
         overflow-y: auto !important;
         overscroll-behavior: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
-        pointer-events: auto;
+        z-index: 3;
     }
 
     /* WHY: All Apps is a 1fr grid child — without a scrollport, rows squash to fit the viewport. */
@@ -50,7 +59,7 @@
         z-index: calc(var(--env-z-shell-chrome, 2147483000) + 2);
         inset-inline: 0;
         inset-block-end: var(--env-shell-chrome-stack-reserve, 3rem);
-        display: grid;
+        display: grid !important;
         align-items: end;
         justify-items: start;
         padding: 0.5rem;
@@ -59,6 +68,10 @@
         box-sizing: border-box;
         /* WHY: match TaskBar — light-dark() follows used color-scheme (QS/Theme pin). */
         color-scheme: inherit;
+        grid-template-rows: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "panel";
+
         /*
          * WHY: hard #f4f4f5/#1c1c1e fixed light/dark contrast but killed Veela tint.
          * Keep light-dark for scheme flip; mix primary so surfaces stay colorized.
@@ -94,42 +107,74 @@
         display: none !important;
     }
 
-    .env-shell-app-menu__panel {
-        pointer-events: auto;
-        display: grid;
-        gap: 0.75rem;
+    /*
+     * WHY: WebView only blurs an element that has a real border box over the wallpaper.
+     * A detached backdrop (anchor / clip-path / sibling of this fixed menu) samples nothing.
+     * The frame does not scroll. The panel inside it does, with no filter of its own.
+     */
+    .env-shell-app-menu__frame {
+        position: relative;
+        isolation: auto;
+        contain: none;
+        overflow: visible;
+        transform: none;
         inline-size: min(420px, calc(100vw - 1rem));
-        max-block-size: min(520px, calc(100dvb - var(--env-shell-chrome-stack-reserve, 3rem) - 1rem));
-        padding: 0.85rem;
         border-radius: 14px;
         border: 1px solid light-dark(
             color-mix(in oklab, #000 12%, transparent),
             color-mix(in oklab, #fff 14%, transparent)
         );
-        /* WHY: tinted acrylic — not flat gray; color-scheme still drives light-dark(). */
         background: var(--env-app-menu-surface);
-        color: var(--env-app-menu-ink);
         box-shadow:
             0 20px 48px -20px light-dark(rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.45)),
             0 2px 8px -2px light-dark(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.25));
+        backdrop-filter: blur(22px) saturate(1.35);
+        -webkit-backdrop-filter: blur(22px) saturate(1.35);
+        pointer-events: auto;
+    }
+
+    .env-shell-app-menu[data-page] .env-shell-app-menu__frame {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .env-shell-app-menu__frame:has(> .env-shell-app-menu__panel[data-layout="start-split"]) {
+        inline-size: min(560px, calc(100vw - 1rem));
+    }
+
+    .env-shell-app-menu__frame:has(> .env-shell-app-menu__panel[data-layout="start-split"]) > .env-shell-app-menu__panel {
+        max-block-size: min(580px, calc(100dvb - var(--env-shell-chrome-stack-reserve, 3rem) - 1rem));
+    }
+
+    .env-shell-app-menu__panel {
+        position: relative;
+        z-index: 3;
+        pointer-events: auto;
+        display: grid;
+        gap: 0.75rem;
+        inline-size: 100%;
+        max-block-size: min(520px, calc(100dvb - var(--env-shell-chrome-stack-reserve, 3rem) - 1rem));
+        min-block-size: max(60dvb, 60cqb);
+        block-size: fit-content;
+        padding: 0.85rem;
+        border-radius: inherit;
+        border: 0;
+        background: transparent;
+        color: var(--env-app-menu-ink);
+        box-shadow: none;
         overflow: hidden;
         overflow-y: auto !important;
         overscroll-behavior: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
-        animation: env-app-menu-in 140ms cubic-bezier(0.22, 0.8, 0.3, 1);
         color-scheme: inherit;
-        backdrop-filter: blur(22px) saturate(1.35);
-        -webkit-backdrop-filter: blur(22px) saturate(1.35);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         grid-template-rows: auto auto minmax(0, 1fr);
-        min-block-size: max(60dvb, 60cqb);
-        block-size: fit-content;
     }
 
     /* Win7-style Start: recent | folders/grid */
     .env-shell-app-menu__panel[data-layout="start-split"] {
-        inline-size: min(560px, calc(100vw - 1rem));
-        max-block-size: min(580px, calc(100dvb - var(--env-shell-chrome-stack-reserve, 3rem) - 1rem));
         grid-template-rows: auto auto minmax(0, 1fr);
     }
 
@@ -472,6 +517,23 @@
         user-select: none;
     }
 
+    /* PERF: offscreen launcher tiles stay out of the scroll layer until they approach. */
+    html[data-cwsp-native-shell="capacitor"] .env-shell-app-menu__tile {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 5.6rem;
+    }
+
+    html[data-cwsp-native-shell="capacitor"] .env-shell-app-menu__tile-icon[data-shape="shapeless"] {
+        img.sd-icon-silhouette,
+        ui-icon.sd-icon-silhouette {
+            filter: none;
+        }
+
+        &[data-icon-display="glyph"] ui-icon:not(.sd-icon-silhouette) {
+            filter: none;
+        }
+    }
+
     .env-shell-app-menu__tile:hover,
     .env-shell-app-menu__tile:focus-visible {
         background: color-mix(in oklab, var(--env-app-menu-accent, var(--color-primary, #60cdff)) 12%, transparent);
@@ -486,7 +548,7 @@
         pointer-events: none;
     }
 
-    html[data-app-menu-dragging] .env-shell-app-menu__panel {
+    html[data-app-menu-dragging] .env-shell-app-menu__frame {
         opacity: 0;
         visibility: hidden;
     }
@@ -593,8 +655,9 @@
         border: none;
         background: var(--env-app-menu-plate);
         box-shadow: 0 6px 24px -8px color-mix(in oklab, #000 38%, transparent);
-        backdrop-filter: blur(16px) saturate(1.35);
-        -webkit-backdrop-filter: blur(16px) saturate(1.35);
+        /* WHY: per-tile backdrop-filter re-blurs on every scroll frame. Plate fill is enough. */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         box-sizing: border-box;
         overflow: hidden;
         color: var(--color-on-primary-container, var(--env-app-menu-ink));
@@ -781,11 +844,9 @@
     @keyframes env-app-menu-in {
         from {
             opacity: 0;
-            transform: translateY(8px) scale(0.98);
         }
         to {
             opacity: 1;
-            transform: translateY(0) scale(1);
         }
     }
 
