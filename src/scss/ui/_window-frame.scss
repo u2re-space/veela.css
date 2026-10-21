@@ -503,7 +503,7 @@
 
 @mixin window-frame-variables {
     // Window frame CSS custom properties — prefer veela/MD tokens over raw hex
-    --ui-window-frame-bg: var(--color-surface, var(--fl-surface, --u2-color-mod(var(--base-color, #5a7fff), 40)));
+    --ui-window-frame-bg: var(--color-surface-container-low, var(--fl-surface, --u2-color-mod(var(--base-color, #5a7fff), 40)));
     --ui-window-frame-color: var(--color-on-surface, var(--fl-on-surface, --u2-color-mod(var(--base-color, #5a7fff), 900)));
     --ui-window-frame-border-radius: var(--radius-lg, 0.75rem);
     --ui-window-frame-shadow: var(--shadow-xl, var(--fl-shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.1)));

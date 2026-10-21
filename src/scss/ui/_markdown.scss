@@ -295,7 +295,7 @@ $_h-sizes: (
         block-size: stretch;
         overflow: auto;
         padding: var(--space-2xl) var(--space-xl);
-        background: var(--color-surface);
+        background: var(--color-surface-container-low);
         box-shadow: none;
         transition: box-shadow var(--motion-normal);
         overflow-wrap: break-word;
@@ -864,7 +864,7 @@ $_h-sizes: (
         margin: 0px !important;
         padding: var(--space-xl);
         overflow: auto;
-        background: var(--color-surface);
+        background: var(--color-surface-container-low);
         color: var(--color-on-surface);
         font-family: var(--print-font-mono);
         font-size: var(--text-sm, .875rem);

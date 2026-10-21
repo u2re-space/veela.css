@@ -809,8 +809,8 @@ $selectors: $md-roots;
         --sv-fg: var(--sv-on-surface, var(--color-on-surface, light-dark(#12151a, #e8edf2)));
         --sv-muted: var(--sv-on-surface-variant, var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc)));
         --sv-outline: var(--sv-outline-variant, var(--color-outline-variant, light-dark(#c5cdd8, #3d4755)));
-        --sv-surface-1: var(--color-surface-container-high, light-dark(#ffffff, #171c24));
-        --sv-surface-2: var(--color-surface, light-dark(#f4f6fa, #1c232d));
+        --sv-surface-1: var(--color-surface, light-dark(#ffffff, #171c24));
+        --sv-surface-2: var(--color-surface-container-low, light-dark(#f4f6fa, #1c232d));
         --sv-primary: var(--base-color, var(--color-primary, #5a9ec8));
         --sv-danger: var(--color-error, #d32f2f);
 

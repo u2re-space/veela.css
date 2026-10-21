@@ -15,7 +15,7 @@
     overflow: auto;
     box-sizing: border-box;
     color-scheme: inherit;
-    background: var(--color-surface, light-dark(#f4f6f8, #141218));
+    background: var(--color-surface-container-low, light-dark(#f4f6f8, #141218));
     color: var(--color-on-surface, light-dark(#1c1b1f, #e6e1e5));
 }
 
@@ -34,12 +34,12 @@
 }
 
 .explorer-settings {
-    --es-bg: var(--color-surface, light-dark(#f4f6f8, #141218));
+    --es-bg: var(--color-surface-container-low, light-dark(#f4f6f8, #141218));
     --es-fg: var(--color-on-surface, light-dark(#1c1b1f, #e6e1e5));
     --es-muted: var(--color-on-surface-variant, light-dark(#5c6570, #a8b0bc));
     --es-outline: var(--color-outline-variant, light-dark(#c5cdd8, #3d4755));
-    --es-surface-1: var(--color-surface-container-low, light-dark(#ffffff, #1c232d));
-    --es-surface-2: var(--color-surface-container, light-dark(#f4f6f8, #171c24));
+    --es-surface-1: var(--color-surface, light-dark(#ffffff, #1c232d));
+    --es-surface-2: var(--color-surface-container-low, light-dark(#f4f6f8, #171c24));
     --es-primary: var(--color-primary, #5a9ec8);
     --es-on-primary: var(--color-on-primary, #fff);
 

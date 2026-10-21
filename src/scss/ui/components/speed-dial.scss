@@ -2100,7 +2100,7 @@ html[data-theme="light"] .sd-icon-picker,
     border-radius: 18px;
     background: color-mix(
         in oklab,
-        var(--color-surface-container, var(--sd-editor-panel)) 92%,
+        var(--color-surface-container-low, var(--sd-editor-panel)) 92%,
         transparent
     );
     color: inherit;

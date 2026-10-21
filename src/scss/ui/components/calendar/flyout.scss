@@ -8,7 +8,7 @@
 @layer components {
     :host {
         --cal-base-color: var(--color-primary);
-        --cal-surface: var(--color-surface);
+        --cal-surface: var(--color-surface-container-low);
         --cal-on-surface: var(--color-on-surface);
         --cal-outline: color-mix(in oklab, var(--color-outline-variant) 80%, transparent);
         --cal-hover: color-mix(in oklab, var(--color-on-surface) 8%, transparent);
