@@ -64,7 +64,7 @@ Native CSS custom functions (plus runtime fallbacks):
 | --- | --- |
 | `--c2-surface(tone, base-color, scheme-id)` | surface |
 | `--c2-on-surface(...)` | ink on surface |
-| `--c2-contrast(...)` | contrast fill |
+| `--u2-contrast(...)` | contrast fill |
 | `--c2-on-contrast(...)` | ink on contrast |
 
 - **scheme-id:** `0` light · `1` dark · `2` default (follow host).

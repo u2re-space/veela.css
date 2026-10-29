@@ -15,8 +15,8 @@
         padding: 0.35rem;
         border-radius: 0.85rem;
         background: var(--navbar-switcher-background);
-        color: contrast-color(var(--navbar-switcher-background));
-        --icon-color: contrast-color(var(--navbar-switcher-background));
+        color: --u2-contrast-color(var(--navbar-switcher-background));
+        --icon-color: --u2-contrast-color(var(--navbar-switcher-background));
         border: 1px solid light-dark(color-mix(in oklch, #fff 12%, transparent), color-mix(in oklch, #1c1c1e 12%, transparent));
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
         backdrop-filter: blur(18px);

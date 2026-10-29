@@ -40,7 +40,7 @@
         gap: 0px !important;
         padding: 0px 0px 0px 0px !important;
         font: 12px ui-sans-serif, system-ui, sans-serif;
-        /* WHY: contrast-color(dark variant) painted white glyphs on the light dock. */
+        /* WHY: --u2-contrast-color(dark variant) painted white glyphs on the light dock. */
         color: var(--color-on-surface, var(--wf-md-on-surface-variant, #1c1c1e));
         pointer-events: none;
     }
@@ -491,14 +491,14 @@
     .env-shell-chrome:not([data-desktop]) .env-shell-taskbar ui-task[data-env-home]:hover,
     .env-shell-chrome:not([data-desktop]) .env-shell-taskbar ui-task[data-env-home]:active {
         background: color-mix(in oklch, #fff 10%, transparent);
-        color: contrast-color(inherit(background-color));
+        color: --u2-contrast-color(inherit(background-color));
     }
     
     .env-shell-chrome:not([data-desktop]) .env-shell-taskbar ui-task[data-env-home][data-env-active="true"],
     .env-shell-chrome:not([data-desktop]) .env-shell-taskbar ui-task[data-env-home][data-active],
     .env-shell-chrome:not([data-desktop]) .env-shell-taskbar ui-task[data-env-home][data-focus] {
         background: color-mix(in oklch, #fff 8%, transparent);
-        color: contrast-color(inherit(background-color));
+        color: --u2-contrast-color(inherit(background-color));
         /*box-shadow: inset 0 -2px 0 #60cdff;*/
     }
     

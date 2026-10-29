@@ -22,3 +22,7 @@
         h
     );
 }
+
+@#{"function --u2-contrast-color(--base-color-bg <color>) returns <color>"} {
+    result: color-mix(in oklch, contrast-color(var(--base-color-bg)) 80%, var(--base-color));
+}

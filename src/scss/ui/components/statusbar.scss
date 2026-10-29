@@ -94,7 +94,7 @@
     .env-ui-statusbar__clock:hover,
     .env-ui-statusbar__clock:focus-visible {
         background: color-mix(in oklch, currentColor 12%, transparent);
-        color: contrast-color(inherit(background-color));
+        color: --u2-contrast-color(inherit(background-color));
         outline: none;
     }
 
@@ -107,7 +107,7 @@
     .env-device-tray--footer:hover,
     .env-device-tray--footer:focus-visible {
         background: color-mix(in oklch, currentColor 12%, transparent);
-        color: contrast-color(inherit(background-color));
+        color: --u2-contrast-color(inherit(background-color));
         outline: none;
     }
 
@@ -128,7 +128,7 @@
         border: 1px solid color-mix(in oklch, var(--env-status-fg, var(--wf-md-on-surface, white)) 18%, transparent);
         line-height: 1;
         color: inherit;
-        color: contrast-color(inherit(background-color));
+        color: --u2-contrast-color(inherit(background-color));
         font-variant-numeric: tabular-nums;
 
         span {

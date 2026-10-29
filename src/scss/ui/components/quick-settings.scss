@@ -2,7 +2,7 @@
  * Filename: QuickSettings.scss
  * FullPath: modules/projects/fl.ui/src/ui/navigation/settings/QuickSettings.scss
  * Change date and time: 20.00.00_03.09.2026
- * Reason for changes: Drop contrast-color()/inherit() — Capacitor WebView drops the rest of the sheet.
+ * Reason for changes: Drop --u2-contrast-color()/inherit() — Capacitor WebView drops the rest of the sheet.
  * FIND:chrome-rail
  */
 
@@ -67,7 +67,7 @@
         border-radius: 14px;
         border: 1px solid var(--qs-outline);
         background: var(--qs-surface);
-        /* WHY: contrast-color()/inherit() need Chrome flags; replaceSync then drops later rules (sliders, footer). */
+        /* WHY: --u2-contrast-color()/inherit() need Chrome flags; replaceSync then drops later rules (sliders, footer). */
         color: var(--color-on-surface, var(--qs-on-surface));
         /* INVARIANT: no backdrop-filter — Win11-like solid panel per spec, keeps perf on low-end devices. */
         box-shadow:
