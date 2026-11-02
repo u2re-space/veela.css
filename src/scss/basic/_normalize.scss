@@ -254,6 +254,9 @@
             outline: none 0px transparent;
             box-shadow: none 0px transparent;
             dynamic-range-limit: no-limit;
+            -moz-force-broken-image-icon: 0;
+            font-size: 0;
+            line-height: 0;
         }
 
         :where(img, video, canvas, svg, picture) {
